@@ -1,4 +1,0 @@
-﻿{
-  "title": "级联选择中心",
-  "view" : "KCascader"
-}
