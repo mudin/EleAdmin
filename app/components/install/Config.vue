@@ -3,27 +3,27 @@
     <div slot="header" class="header">
       <span>数据库</span>
     </div>
-    <el-form ref="form" :model="form" label-width="100px">
-      <el-form-item label="数据库驱动">
-        <el-radio-group v-model="value.db.type">
-          <el-radio label="0">Mysql</el-radio>
-          <el-radio label="1">Mssql</el-radio>
+    <el-form ref="form" :model="db" label-width="100px"  :rules="rules">
+      <el-form-item label="数据库驱动" prop="type">
+        <el-radio-group v-model="db.type">
+          <el-radio label="0" :validateEvent="false">Mysql</el-radio>
+          <el-radio label="1" :validateEvent="false">Mssql</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="主机地址">
-        <el-input v-model="value.db.host"></el-input>
+      <el-form-item label="主机地址" prop="host">
+        <el-input v-model="db.host" :validateEvent="false"></el-input>
       </el-form-item>
-      <el-form-item label="主机端口">
-        <el-input v-model="value.db.port"></el-input>
+      <el-form-item label="主机端口" prop="port">
+        <el-input v-model="db.port" :validateEvent="false"></el-input>
       </el-form-item>
-      <el-form-item label="数据库名称">
-        <el-input v-model="value.db.name"></el-input>
+      <el-form-item label="数据库名称" prop="name">
+        <el-input v-model="db.name" :validateEvent="false"></el-input>
       </el-form-item>
-      <el-form-item label="用户名">
-        <el-input v-model="value.db.username"></el-input>
+      <el-form-item label="用户名" prop="user">
+        <el-input v-model="db.user" :validateEvent="false"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="value.db.password"></el-input>
+      <el-form-item label="密码" prop="pass">
+        <el-input v-model="db.pass" :validateEvent="false"></el-input>
       </el-form-item>
     </el-form>
   </el-card>
@@ -32,23 +32,32 @@
 <script>
   export default {
     props: {
-      mate: Object
+      value: Object
     },
     data () {
       return {
-        value: {
-          db: {
-            type: 0,
-            host: 'localhost',
-            port: '3306',
-            username: 'root',
-            password: '',
-            name: ''
-          }
+        db: this.value.db,
+        rules: {
+          name: [{required: true, message: '请输入数据库名称', trigger: 'blur'}],
+          pass: [{required: true, message: '请输入密码', trigger: 'blur'}]
         }
       };
     },
+    created () {
+    },
+    mounted () {
+      this.$watch('db', () => {
+        this.$refs['form'].validate((valid) => {
+          // this.$emit('change', 'db', this.db);
+          this.$emit('activeNext', !!(valid));
+        });
+      }, {
+        deep: true
+      });
+    },
     methods: {
+    },
+    watch: {
     }
   };
 </script>

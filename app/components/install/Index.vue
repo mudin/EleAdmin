@@ -5,23 +5,23 @@
       <!-- 主内容区 -->
       <div  class="main" >
         <div class="install-box">
-          <el-steps :space="200" :active="step" finish-status="success" center="true">
+          <el-steps :space="200" :active="step" finish-status="success" :center="true">
             <el-step title="安装协议" description=""></el-step>
-            <el-step title="基本配置" description=""></el-step>
+            <el-step title="数据库配置" description=""></el-step>
             <el-step title="设置管理员" description=""></el-step>
             <el-step title="完成安装" description=""></el-step>
           </el-steps>
 
           <div id="content">
             <transition name="el-fade-in">
-              <component v-bind:is="view" @activeNext="activeNext"></component>
+              <component v-bind:is="view" @activeNext="activeNext" :value="value" @change="onChange"></component>
             </transition>
           </div>
 
           <div class="but-group">
             <el-button @click.native.prevent="handlePreStep" :disabled="prev">上一步</el-button>
             <el-button @click.native.prevent="handleNextStep" :disabled="next" v-show="!isComplete">下一步</el-button>
-            <el-button @click.native.prevent="handleComplete" :disabled="next" v-show="isComplete">完成</el-button>
+            <el-button @click.native.prevent="handleComplete" v-show="isComplete" :disabled="next">完成</el-button>
           </div>
         </div>
       </div>
@@ -40,13 +40,31 @@
       Config,
       Manage
     },
+    props: {
+      config: Object
+    },
     data () {
       return {
         next: true,
         prev: true,
         step: 0,
-        isComplete: false,
-        views: ['License', 'Config', 'Manage']
+        views: ['License', 'Config', 'Manage'],
+        value: {
+          checked: false,
+          db: {
+            type: '0',
+            host: 'localhost',
+            port: '3306',
+            user: 'root',
+            pass: '',
+            name: ''
+          },
+          admin: {
+            name: 'admin',
+            password: '',
+            email: ''
+          }
+        }
       };
     },
     computed: {
@@ -58,8 +76,14 @@
       view () {
         return this.views[this.step];
       },
+      /**
+       * 视图个数
+       */
       max () {
-        return this.views.length - 1;
+        return this.views.length;
+      },
+      isComplete () {
+        return (this.step >= this.max);
       }
     },
     watch: {
@@ -74,11 +98,12 @@
         this.next = !next;
       },
       handleNextStep () {
-        if (this.step < this.max) {
+        if (this.step < this.max - 1) {
           this.step++;
           this.prev = false;
-          this.isComplete = (this.step === this.max);
           this.next = true;
+        } else {
+          this.runComplete();
         }
       },
       handlePreStep () {
@@ -88,9 +113,20 @@
           this.prev = (this.step <= 0);
         }
       },
+      runComplete () {
+        this.$root.ajaxer(this.config.url, this.value, true).then((data) => {
+          this.step = this.max;
+          this.prev = true;
+          this.next = false;
+        });
+        // 成功后step = 3
+        // 显示安装成功页面
+      },
       handleComplete () {
-        // this.step--;
-        // this.next = (this.step <= 0);
+        this.step++;
+      },
+      onChange (tag, v) {
+        this.config[tag] = v;
       }
     }
   };
@@ -98,7 +134,7 @@
 
 <style scoped>
   #install {
-    width: 1000px;
+    width: 1200px;
     margin: 0 auto;
     font-family: "Helvetica Neue","PingFang SC",Arial,sans-serif;
   }

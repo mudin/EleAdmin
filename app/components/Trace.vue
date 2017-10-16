@@ -5,7 +5,7 @@
       <el-tab-pane v-for="(item, label) in trace" :label="label" :name="label"  :key="label">
         <div class="trace-tab-content">
           <ol style="padding: 0; margin:0">
-            <li v-for="v in item">{{v.msg}}</li>
+            <li v-for="v in item">{{v}}</li>
           </ol>
         </div>
       </el-tab-pane>

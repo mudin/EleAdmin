@@ -100,6 +100,7 @@ export default {
       return new Promise((resolve, reject) => {
         $http(option).then(response => {
           let data = response.data;
+          console.log(data);
           // 判断返回结果信息
           if (data.status && Number(data.status) < 0) {
             throw new Error(data.message || '操作失败');

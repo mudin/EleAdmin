@@ -29,19 +29,33 @@ export default {
     },
     Module: function index (resolve) {
       require(['./components/module/Index.vue'], resolve);
+    },
+    Install: function index (resolve) {
+      require(['./components/Install/Index.vue'], resolve);
     }
   },
   created () {
     let self = this;
+    this.$root.ajaxer = function (url = '', data = {}, post = false) {
+      if (url === '') url = window.bench;
+      // console.log(url);
+      return this.ajax(url, data, post).then((response) => {
+        self.trace = response.__trace__ || {};
+        // 这里是为了级联then
+        return response;
+      });
+    };
     /**
      * 返回Promise是为了统一返回值
      */
     this.$root.monitor = function (url = '', data = {}) {
-      if (url === '') url = window.bench;
-      // console.log(url);
-      let promise = self.$root.ajax(url, data).then((response) => {
-        self.view = response.view || {};
-        self.trace = response.__trace__ || {};
+      let promise = this.ajaxer(url, data).then((response) => {
+        self.view = response.view || {
+          name: 'Simple',
+          config: {
+            message: response.message
+          }
+        };
         throw new Error('route');
       });
       promise.catch((e) => {});
@@ -54,6 +68,7 @@ export default {
   },
   beforeDestroy () {
     delete this.$root.monitor;
+    delete this.$root.ajaxer;
   }
 };
 </script>
