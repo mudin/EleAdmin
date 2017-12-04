@@ -5,10 +5,10 @@
       <el-row v-for="(v, index) in local" :key="index">
         <el-col :span="((item.holder === 'group')? 24 : 20)" class="el-item">
           <el-switch         v-if="item.holder === 'switch'" v-model="local[index]"
-                             :on-color="item.onColor||'#13ce66'"
-                             :off-color="item.offColor||'#ff4949'"
-                             :on-text="item.onText||'开启'"
-                             :off-text="item.offColor||'关闭'"
+                             :active-color="item.onColor||'#13ce66'"
+                             :inactive-color="item.offColor||'#ff4949'"
+                             :active-text="item.onText||'开启'"
+                             :inactive-text="item.offColor||'关闭'"
                              :disabled="disabled"
 
           ></el-switch>
@@ -28,7 +28,7 @@
           ></el-input>
         </el-col>
         <el-col :span="4" class="el-item" v-if="item.holder !== 'group'">
-          <el-button :icon="btnIcon" :type="btnType" @click="handleRemove(index)"></el-button>
+          <el-button :icon="btnIcon" :type="btnType" @click="handleRemove(index)" round size="mini"></el-button>
         </el-col>
       </el-row>
       <el-row v-if="item.asArray" v-show="!disabled">
@@ -43,7 +43,7 @@
       label: String,
       item: {
         type: Object,
-        'default': () => {return {};}
+        'default': () => { return {}; }
       },
       value: {
         'default': null
@@ -69,15 +69,15 @@
     },
     watch: {
       local (val) {
-        if(this.disabled) return;
+        if (this.disabled) return;
 
-        if (this.item.asArray){
+        if (this.item.asArray) {
           this.$emit('input', val);
         } else {
           this.$emit('input', val[0]);
         }
       },
-      value (v) {
+      value () {
         this.defaultValue();
       }
     },
@@ -86,7 +86,7 @@
         return (this.disabled ? 'primary' : 'danger');
       },
       btnIcon () {
-        return (this.disabled ? 'edit' : 'minus');
+        return 'el-icon-' + (this.disabled ? 'edit' : 'minus');
       }
     },
     methods: {
@@ -107,21 +107,20 @@
       },
       handleRemove (index) {
         // 启动
-        if(this.disabled) {
+        if (this.disabled) {
           this.disabled = false;
           return;
         }
         // 删除
         this.local.splice(index, 1);
         // 赋值为默认值用于占位并禁用
-        if (this.local.length === 0){
+        if (this.local.length === 0) {
           // console.log('remove' + this.label + index);
           this.actRemove();
           // return;
         }
         // 提示
         // console.log('delete' + this.label + index);
-
       },
       actRemove () {
         this.disabled = true;

@@ -28,11 +28,11 @@ export default {
   data () {
     return {
       show: false,
-      activeName: ''
+      activeName: '流程'
     };
   },
   created () {
-    // this.activeName = this.trace[0].label
+    // this.activeName = this.trace[0].label;
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <Boxer :mate="mate" :hasSelected="hasSelected" @action="handleButton" ref="Boxer">
+  <Boxer :config="config" :hasSelected="hasSelected" @action="handleButton" ref="Boxer">
     <div slot="search" class="search">
-      <j-form :mate="mate.search" v-if="mate.search" v-on:search="search"></j-form>
+      <j-form :config="config.search" v-if="config.search" v-on:search="search"></j-form>
     </div>
     <div slot="main">
       <el-row>
@@ -11,14 +11,14 @@
                     style="width: 100%"
           >
               <el-table-column type="selection" width="50"></el-table-column>
-              <el-table-column v-for="col in mate.columns" :key="col.label"
+              <el-table-column v-for="col in config.columns" :key="col.label"
                                :label="col.label" :prop="col.name"
                                :width="col.width" :sortable="col.sortable"
               ></el-table-column>
-              <el-table-column label="操作" :width="actionWidth" v-if="mate.actions">
-                <template scope="scope">
+              <el-table-column label="操作" :width="actionWidth" v-if="config.actions">
+                <template slot-scope="scope">
                   <k-btn
-                         v-for="act in mate.actions" :key="act.index"
+                         v-for="act in config.actions" :key="act.index"
                          size="small" :act="act" :row="scope.row"
                          @action="handleAction"
                   ></k-btn>
@@ -57,13 +57,12 @@ export default {
     }
   },
   props: {
-    mate: Object
+    config: Object
   },
   data () {
     return {
       // 顶部按钮
       multipleSelection: [],
-      hasSelected: false,
       // 查询
       searchValues: {},
       // 排序
@@ -73,25 +72,26 @@ export default {
       page: 0,
       rows: [],
       pSize: 20,
-      total: 0
+      total: 0,
+      selected: []
     };
   },
   created () {
-    this.updateData(this.mate);
+    this.updateData(this.config);
   },
   watch: {
-    multipleSelection (newSelection) {
-      this.hasSelected = (newSelection.length !== 0);
-    },
-    mate  (newMate) {
+    config  (newConfig) {
       this.$nextTick(() => {
-        this.updateData(newMate);
+        this.updateData(newConfig);
       });
     }
   },
   computed: {
     actionWidth () {
-      return this.mate.actions.length * 60 + 30;
+      return this.config.actions.length * 60 + 30;
+    },
+    hasSelected () {
+      return (this.multipleSelection.length !== 0);
     }
   },
   //  mounted () {
@@ -118,11 +118,19 @@ export default {
      * 重置选中行
      */
     rowSelect () {
-      this.mate.rows.forEach(row => {
-        /* eslint-disable */
-        let select = (row.id && this.mate.selected && this.mate.selected.findIndex(id => id == row.id) !== -1);
-        /* eslint-enable */
-        this.$refs.table.toggleRowSelection(row, (select === true));
+      // 没有选择行
+      if (!(this.selected)) return;
+      // 有选择行
+      this.config.rows.forEach(row => {
+        let select = (
+          row.id &&
+          (this.selected.findIndex((id) => {
+            /* eslint-disable */
+            return id == row.id;
+            /* eslint-enable */
+          }) !== -1)
+        );
+        this.$refs.table.toggleRowSelection(row, Boolean(select));
       });
     },
     /**
@@ -143,14 +151,15 @@ export default {
      * 重新远程获取数据
      */
     getData () {
-      // console.log(this.mate.dataApi);
-      let url = this.mate.dataApi;
+      // console.log(this.config.dataApi);
+      let url = this.config.dataApi;
       let param = {
         search: this.searchValues,
         page: this.page,
         sort: this.sortValues
       };
-      this.$root.ajax(url, param).then((data) => {
+      this.$refs.table.clearSelection();
+      this.$root.ajaxer(url, param).then((data) => {
         this.updateData(data);
       });
     },
@@ -160,7 +169,7 @@ export default {
     updateData (data) {
       if (data.rows) this.rows = data.rows;
       if (data.total) this.total = data.total;
-      if (data.selected) this.selected = data.selected;
+      this.selected = data.selected || [];
       if (data.size) this.pSize = data.size;
       this.$nextTick(() => { this.rowSelect(); });
     },

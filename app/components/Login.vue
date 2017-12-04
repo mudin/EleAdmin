@@ -13,7 +13,7 @@
           <el-input type="verify" placeholder="验证码" v-model="ruleForm.verify"></el-input>
         </el-form-item>
         <el-form-item>
-          <img alt="点击切换" :src="verifyUrl" @click="reloadverify()">
+          <img alt="点击切换" :src="verifyImg" @click="reloadVerify">
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submit">登录</el-button>
@@ -28,10 +28,10 @@ import md5 from './md5.min.js';
 export default {
   data () {
     let validateAjax = (rule, value, callback) => {
-      this.$root.ajax('/verify.js',{value}).then((data) => {
+      this.$root.ajaxer(this.config.checkUrl, {value}).then(() => {
         callback();
-      }, (error) => {
-        callback(error);
+      }, () => {
+        callback(new Error('验证失败'));
       });
     };
     return {
@@ -52,15 +52,17 @@ export default {
           {validator: validateAjax, trigger: 'blur'}
         ]
       },
-      verifyImgUrl: '',
-      verifyUrl: ''
+      verifyImg: ''
     };
   },
   props: {
     config: Object
   },
+  computed: {
+    //
+  },
   created () {
-    this.verifyUrl = this.verifyImgUrl = this.config.verifyImgUrl;
+    this.reloadVerify();
   },
   methods: {
     submit () {
@@ -71,8 +73,11 @@ export default {
         }
       });
     },
-    reloadverify () {
-      this.verifyUrl = this.verifyImgUrl + '?random=' + Math.random();
+    reloadVerify () {
+      // this.$root.ajaxer(this.config.verifyUrl + '?random=' + Math.random()).then((data) => {
+      //   this.verifyImg = data;
+      // });
+      this.verifyImg = window.createUrl(this.config.verifyUrl + '?random=' + Math.random());
     }
   }
 };

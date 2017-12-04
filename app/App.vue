@@ -6,6 +6,7 @@
 </template>
 
 <script>
+
 import Trace from './components/Trace.vue';
 
 export default {
@@ -34,12 +35,13 @@ export default {
       require(['./components/Install/Index.vue'], resolve);
     }
   },
-  created () {
+  /**
+   * 类似 created 函数不要使用箭头函数
+   */
+  created: function () {
     let self = this;
     this.$root.ajaxer = function (url = '', data = {}, post = false) {
-      if (url === '') url = window.bench;
-      // console.log(url);
-      return this.ajax(url, data, post).then((response) => {
+      return self.$root.ajax(url, data, post).then((response) => {
         self.trace = response.__trace__ || {};
         // 这里是为了级联then
         return response;
@@ -49,7 +51,7 @@ export default {
      * 返回Promise是为了统一返回值
      */
     this.$root.monitor = function (url = '', data = {}) {
-      let promise = this.ajaxer(url, data).then((response) => {
+      let promise = self.$root.ajaxer(url, data).then((response) => {
         self.view = response.view || {
           name: 'Simple',
           config: {
@@ -63,7 +65,7 @@ export default {
     };
     // 启动
     this.$nextTick(() => {
-      this.$root.monitor();
+      self.$root.monitor();
     });
   },
   beforeDestroy () {
@@ -74,7 +76,7 @@ export default {
 </script>
 
 <style scoped>
-  html, body, #app {
+  html, body {
     margin: 0;
     height: 100%;
     width: 100%;
@@ -84,6 +86,6 @@ export default {
   #app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
+    /* text-align: center;*/
   }
 </style>

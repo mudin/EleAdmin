@@ -7,8 +7,6 @@
         <div class="install-box">
           <el-steps :space="200" :active="step" finish-status="success" :center="true">
             <el-step title="安装协议" description=""></el-step>
-            <el-step title="数据库配置" description=""></el-step>
-            <el-step title="设置管理员" description=""></el-step>
             <el-step title="完成安装" description=""></el-step>
           </el-steps>
 
@@ -19,9 +17,9 @@
           </div>
 
           <div class="but-group">
-            <el-button @click.native.prevent="handlePreStep" :disabled="prev">上一步</el-button>
-            <el-button @click.native.prevent="handleNextStep" :disabled="next" v-show="!isComplete">下一步</el-button>
-            <el-button @click.native.prevent="handleComplete" v-show="isComplete" :disabled="next">完成</el-button>
+            <el-button @click.native.prevent="handlePreStep" :disabled="!prev">上一步</el-button>
+            <el-button @click.native.prevent="handleNextStep" :disabled="!next" v-show="!isComplete">下一步</el-button>
+            <el-button @click.native.prevent="handleComplete" :disabled="!next" v-show=" isComplete">完成</el-button>
           </div>
         </div>
       </div>
@@ -45,26 +43,11 @@
     },
     data () {
       return {
-        next: true,
-        prev: true,
+        next: false,
+        prev: false,
         step: 0,
-        views: ['License', 'Config', 'Manage'],
-        value: {
-          checked: false,
-          db: {
-            type: '0',
-            host: 'localhost',
-            port: '3306',
-            user: 'root',
-            pass: '',
-            name: ''
-          },
-          admin: {
-            name: 'admin',
-            password: '',
-            email: ''
-          }
-        }
+        views: ['License'],
+        value: {}
       };
     },
     computed: {
@@ -80,7 +63,7 @@
        * 视图个数
        */
       max () {
-        return this.views.length;
+        return this.views.length - 1;
       },
       isComplete () {
         return (this.step >= this.max);
@@ -90,20 +73,18 @@
     },
     methods: {
       /**
-       * 激活/关闭【下一步】按钮
+       * 响应子视图激活/关闭【下一步】按钮
        *
        * @param next
        */
       activeNext (next) {
-        this.next = !next;
+        this.next = next;
       },
       handleNextStep () {
-        if (this.step < this.max - 1) {
+        if (this.step < this.max) {
           this.step++;
           this.prev = false;
           this.next = true;
-        } else {
-          this.runComplete();
         }
       },
       handlePreStep () {
@@ -113,17 +94,12 @@
           this.prev = (this.step <= 0);
         }
       },
-      runComplete () {
-        this.$root.ajaxer(this.config.url, this.value, true).then((data) => {
-          this.step = this.max;
-          this.prev = true;
-          this.next = false;
-        });
-        // 成功后step = 3
-        // 显示安装成功页面
-      },
       handleComplete () {
-        this.step++;
+        this.$root.ajaxer(this.config.url, this.value, true).then(() => {
+          this.$root.monitor(this.config.admin);
+        }, () => {
+          this.handlePreStep();
+        });
       },
       onChange (tag, v) {
         this.config[tag] = v;

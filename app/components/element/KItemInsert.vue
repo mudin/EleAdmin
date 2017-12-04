@@ -1,7 +1,7 @@
 <template>
   <span>
     <el-button type="primary" @click="handleExtend">添加</el-button>
-    <el-dialog :title="title" v-model="visible" :modal="false">
+    <el-dialog :title="title" :visible.sync="visible" :modal="false" width="60%">
       <k-item
         label="添加"
         v-model="value"
@@ -17,7 +17,7 @@
 <script>
   import KItem from './KItem.vue';
 
-  function getSchema() {
+  function getSchema () {
     return {
       item: {
         items: {
@@ -65,8 +65,7 @@
         let v = {};
         v.options = [];
         Object.keys(this.schema.item.items).forEach((index) => {
-          switch(index)
-          {
+          switch (index) {
             case '标签':
               if (this.value['标签']) v['label'] = this.value['标签'];
               break;
@@ -77,7 +76,7 @@
               v['asArray'] = !!(this.value['数组化']);
               break;
             case '下拉选项':
-              if (this.value['下拉选项']){
+              if (this.value['下拉选项']) {
                 this.value['下拉选项'].forEach((e) => {
                   v.options.push(JSON.parse(JSON.stringify(e)));
                 });
@@ -88,7 +87,11 @@
           }
         });
         // 无标签不添加
-        if(v.label) this.$emit('extend', v);
+        if (v.label) this.$emit('extend', v);
+        // 重置
+        this.reset();
+      },
+      reset () {
         // 重置
         this.value = {};
         this.visible = false;

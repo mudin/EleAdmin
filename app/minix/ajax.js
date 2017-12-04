@@ -1,8 +1,17 @@
 import $http from 'axios';
 import Qs from 'qs';
 
+// $http.defaults.withCredentials = true;
+
 export default {
   methods: {
+    /**
+     * url 处理
+     */
+    createUrl (url = '') {
+      if (window.createUrl) return window.createUrl(url);
+      return url;
+    },
     /**
      * 基础接口 POST函数
      *
@@ -60,8 +69,12 @@ export default {
     /**
      * 核心处理函数
      *
-     * @param act
-     * @param value
+     * @param {Object} act - 动作描述
+     * @param {bool} act.post - 是否是表单方式
+     * @param {string} act.url - 目标地址
+     * @param act.api - 在线提交+参数过滤
+     * @param act.key - 跳转参数过滤
+     * @param {Object} value - 参数
      *
      * @return Promise
      */
@@ -84,10 +97,18 @@ export default {
       }
     },
 
-    ajax (url, value = null, post = false) {
+    /**
+     * 发送异步请求
+     *
+     * @param {string} url - 目标地址
+     * @param {Object} value - 参数
+     * @param {bool} [post = false] - 是否是表单方式
+     * @return {Promise.<T>}
+     */
+    ajax (url = '', value = null, post = false) {
       let option = {
         method: post ? 'post' : 'get',
-        url
+        url: this.createUrl(url)
       };
       if (post) {
         option.data = Qs.stringify(value);
@@ -95,26 +116,42 @@ export default {
       } else if (value !== null) {
         option.params = JSON.parse(JSON.stringify(value));
       }
-      // console.log(option);
+      // 开启跨域cookie
+      option.withCredentials = true;
 
-      return new Promise((resolve, reject) => {
-        $http(option).then(response => {
-          let data = response.data;
-          console.log(data);
-          // 判断返回结果信息
-          if (data.status && Number(data.status) < 0) {
-            throw new Error(data.message || '操作失败');
-          }
-          resolve(data);
-        }, (error) => {
-          reject(error);
-          throw new Error('数据获取失败');
-        }).catch((error) => {
-          this.$message({
+      // console.log('option:' + JSON.stringify(option));
+      console.log('url:' + option.url);
+
+      let self = this;
+      function onError (data, reject, message) {
+        if (reject) reject(data);
+        else {
+          self.$message({
             type: 'warning',
-            message: error.message || '操作失败'
+            message: data.message || message
           });
+        }
+      }
+      return new Promise((resolve, reject) => {
+        $http(option).then((response) => {
+          let data = response.data;
+          // 判断返回结果信息
+          if ((function (data) {
+            if (typeof data !== 'object') return false;
+            if (data.status === false) return true;
+            return (data.status && Number(data.status) <= 0);
+          })(data)) {
+            onError(data, reject, '操作无效');
+          } else {
+            resolve(data);
+          }
+        }, (error) => {
+          onError(error, reject, '数据获取失败');
+        }).catch((error) => {
+          onError(error, reject, '操作失败');
         });
+      }).catch((error) => {
+        onError(error, null, '内部错误');
       });
     },
     /**

@@ -6,11 +6,11 @@
 let echarts = require('echarts');
 export default {
   props: {
-    mate: Object
+    config: Object
   },
   mounted () {
     this.instance = echarts.init(this.$el);
-    this.instance.setOption(this.mate.options);
+    this.instance.setOption(this.config.options);
   },
   watch: {
     options (v) {

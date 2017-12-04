@@ -1,17 +1,17 @@
 <template>
-  <Boxer :mate="mate" :btnDisable="btnDisable" @action="handleButton">
+  <Boxer :config="config" :btnDisable="btnDisable" @action="handleButton">
     <div slot="main">
       <el-row>
         <el-col :span="24">
           <div class="rltv">
             <div class="title tree-head-first">标题</div>
             <el-row class="last">
-              <el-col v-for="col in mate.columns" :key="col.label" :span="col.span" class="title div-center">{{col.label}}</el-col>
+              <el-col v-for="col in config.columns" :key="col.label" :span="col.span" class="title div-center">{{col.label}}</el-col>
               <el-col :span="actionSpan" class="title div-center">操作</el-col>
             </el-row>
           </div>
           <div>
-            <el-tree :data="mate.rows"
+            <el-tree :data="config.rows"
               :props="defaultProps"
               :render-content='renderContent'>
             </el-tree>
@@ -31,7 +31,7 @@ export default {
     Boxer
   },
   props: {
-    mate: Object
+    config: Object
   },
   data () {
     return {
@@ -48,8 +48,8 @@ export default {
       let vm = this;
       // 生成在线按钮
       let buttons = [];
-      if (this.mate.actions) {
-        for (let btn of this.mate.actions) {
+      if (this.config.actions) {
+        for (let btn of this.config.actions) {
           buttons.push(h(KBtn, {
             props: {
               act: btn,
@@ -65,7 +65,7 @@ export default {
       // 单元格渲染
       let sum = 0;
       let colSpan = 0;
-      let cols = this.mate.columns.map((col) => {
+      let cols = this.config.columns.map((col) => {
         let value = '--';
         if (node.data[col.name] && node.data[col.name] !== '') value = node.data[col.name];
 
@@ -84,7 +84,7 @@ export default {
       return h('span', [h('span', node.data.label), h('div', {'class': {'line-row': true}}, cols)]);
     },
     getData () {
-      this.$root.ajax(this.mate.dataApi);
+      this.$root.ajax(this.config.dataApi);
     },
     handleButton (btn, row) {
       this.$root.action(btn, row).then(() => {

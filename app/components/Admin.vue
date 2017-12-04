@@ -18,14 +18,14 @@
         </div>
       </div>
       <div class="content-main">
-        <component :mate="mate" v-bind:is="mate.view" @refresh="handle"></component>
+        <component :config="mate" v-bind:is="mate.view" @refresh="handle"></component>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Slider from './Slider.vue';
+import Slider from './view/Slider.vue';
 
 export default {
   components: {
@@ -37,6 +37,9 @@ export default {
     },
     JTree: function index (resolve) {
       require(['./view/JTree.vue'], resolve);
+    },
+    Simple: function index (resolve) {
+      require(['./Simple.vue'], resolve);
     },
     //    KMelect: function index (resolve) {
     //      require(['./element/KMelect.vue'], resolve);
@@ -80,7 +83,7 @@ export default {
       // 默认url
       if (url === true) url = this.config.url;
       // 获取框架信息
-      this.$root.ajax(url, {}).then((data) => {
+      this.$root.ajaxer(url, {}).then((data) => {
         if (data.user) this.user = data.user;
         if (data.menus) this.menus = data.menus;
         if (data.commands) this.commands = data.commands;

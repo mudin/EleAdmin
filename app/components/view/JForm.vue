@@ -6,7 +6,7 @@ export default {
     };
   },
   props: {
-    mate: Object
+    config: Object
   },
 
   render: function (createElement) {
@@ -108,43 +108,49 @@ export default {
         [createField(field)]
       );
     });
-    // 添加提交按钮
-    children.push(createElement('el-button',
-      {
-        on: {
-          click: self.handleSubmit.bind(self)
-        }
-      },
-      [(self.mate.inline) ? '搜索' : '提交']
-    ));
-    if (!self.mate.inline) {
-      children.push(createElement('el-button',
+    let submitButton = (label) => {
+      return createElement('el-button',
         {
           on: {
-            click: self.handleReset
+            click: self.handleSubmit.bind(self)
           }
         },
-        ['重置']
-      ));
+        [label]
+      );
+    };
+    // 添加提交按钮
+    if (self.config.inline) children.push(submitButton('搜索'));
+    else {
+      children.push(createElement('el-form-item', {}, [
+        submitButton('提交'),
+        createElement('el-button',
+          {
+            on: {
+              click: self.handleReset
+            }
+          },
+          ['重置']
+        )
+      ]));
     }
     // 表单属性
     let attrs = {};
     // 索引
     let ref = 'ruleForm';
     // 内联样式
-    if (!self.mate.inline) {
-      attrs['label-width'] = (typeof (this.mate.labelWidth) === 'undefined') ? '20%' : self.mate.labelWidth;
+    if (!self.config.inline) {
+      attrs['label-width'] = (typeof (this.config.labelWidth) === 'undefined') ? '20%' : self.config.labelWidth;
     }
     // 自定义样式
-    if (self.mate.style) {
-      attrs['style'] = self.mate.style;
-    }
+    if (self.config.style) attrs['style'] = self.config.style;
+    attrs.size = 'small';
+
     // 传递值
     attrs.value = this.values;
     attrs.model = this.values;
 
     attrs.rules = {};
-    Object.assign(attrs.rules, this.mate.rules);
+    Object.assign(attrs.rules, this.config.rules);
     // 这里用于自身属性遍历
     Object.keys(attrs.rules).forEach((key) => {
       attrs.rules[key].forEach((element) => {
@@ -164,7 +170,7 @@ export default {
     return this.form;
   },
   created () {
-    if (this.mate.values) Object.assign(this.values, this.mate.values);
+    if (this.config.values) Object.assign(this.values, this.config.values);
   },
   watch: {
     values (v) {
@@ -184,11 +190,11 @@ export default {
   },
   computed: {
     fields () {
-      return this.mate.fields || [];
+      return this.config.fields || [];
     },
     rules () {
       let rs;
-      Object.assign(rs, this.mate.rules);
+      Object.assign(rs, this.config.rules);
       // 这里用于自身属性遍历
       Object.keys(rs).forEach((key) => {
         rs[key].forEach((element) => {
@@ -207,17 +213,17 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           // GET跳转
-          if (this.mate.redirect) return this.$root.action(this.mate.redirect, this.values);
+          if (this.config.redirect) return this.$root.action(this.config.redirect, this.values);
 
           // 内联搜索表单
-          if (this.mate.inline) {
+          if (this.config.inline) {
             this.$emit('search', this.values);
             this.$refs.ruleForm.resetFields();
             return;
           }
 
           // POST提交后跳转
-          this.$root.post(this.mate.url, this.values, this.mate.next);
+          this.$root.post(this.config.url, this.values, this.config.next);
         } else {
           this.$notify.error({
             title: '消息',
@@ -228,14 +234,14 @@ export default {
       });
     },
     validatePassword (rule, value, callback) {
-      if (value !== this.mate.values[rule.name]) {
+      if (value !== this.config.values[rule.name]) {
         callback(new Error(rule.message || '两次输入密码不一致!'));
       } else {
         callback();
       }
     },
     validateAsync (rule, value, callback) {
-      this.$http.get(
+      this.$root.ajax(
         rule.url,
         value
       ).then((data) => {

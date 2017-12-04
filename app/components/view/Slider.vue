@@ -1,7 +1,10 @@
 <template>
   <div class="slider">
     <div class="logo"><i class="el-icon-menu"></i> {{title}}</div>
-    <el-menu theme="dark" :unique-opened="true" >
+    <el-menu :unique-opened="true"
+             background-color="#545c64"
+             text-color="#fff"
+             active-text-color="#ffd04b">
       <template v-for="menu in menus">
         <el-submenu :index="menu.index" v-if="menu.menus">
           <template slot="title"><i class="el-icon-ion-person-stalker"></i>{{menu.label}}</template>

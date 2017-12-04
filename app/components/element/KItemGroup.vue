@@ -23,7 +23,7 @@
 
 <script>
   import KItem from './KItem.vue';
-  import KItemInsert from './KItemInsert.vue'
+  import KItemInsert from './KItemInsert.vue';
 
   export default {
     props: {
@@ -72,7 +72,7 @@
         console.log(JSON.stringify(this.value));
       },
       extend (schema) {
-        if(!this.item.items) this.item.items = {};
+        if (!this.item.items) this.item.items = {};
         this.$set(this.item.items, schema.label, schema);
       }
     }

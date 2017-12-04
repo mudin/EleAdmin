@@ -10,6 +10,9 @@ let __trace__ = {
   '信息': [{msg: '这是一条调试信息'}, {msg: '这是一条错误信息'}, {msg: '这是一条普通信息'}, {msg: '这是一条异常信息'}]
 };
 
+window.mockPath = '/index.json';
+window.httpServer = '';
+
 // arguments for reply are (status, data, headers)
 mock.onGet('/login.json').reply(200, {
   view: {
@@ -40,7 +43,7 @@ mock.onGet('/index.json').reply(200, {
   view: {
     name: 'admin',
     config: {
-      url: 'admin.json'
+      url: '/admin.json'
     }
   },
   __trace__
@@ -58,24 +61,24 @@ mock.onGet('/admin.json').reply(200, {
         {
           index: '11',
           label: '十里表单',
-          reload: 'table.json'
+          reload: '/table.json'
         },
         {
           index: '12',
           label: '树状桃花',
-          reload: 'tree.json'
+          reload: '/tree.json'
         }
       ]
     },
     {
       index: '2',
       label: '花开表单',
-      reload: 'form.json'
+      reload: '/form.json'
     },
     {
       index: '3',
       label: '模块系统',
-      url: 'module.json'
+      url: '/module.json'
     }
   ],
   commands: [
@@ -215,8 +218,9 @@ mock.onGet('/form.json').reply(200, {
 
 mock.onGet('/table.json').reply((config) => {
   let rows = Mocker.mock({
-    'rows|20': [
+    'rows|15': [
       {
+        'id|+1': 1,
         'name': '@name',
         'sex|1': true,
         'date': '@date'
@@ -278,9 +282,27 @@ mock.onGet('/table.json').reply((config) => {
         }
       ],
       rows: rows.rows,
-      total: 300
+      total: 200,
+      dataApi: '/table_next.json',
+      selected: [2,8]
     }
   }];
+});
+
+mock.onGet('/table_next.json').reply((config) => {
+  let first = config.params.page || 1;
+  let data = Mocker.mock({
+    'rows|15': [
+      {
+        'id|+1': first*15-14,
+        'name': '@name',
+        'sex|1': true,
+        'date': '@date'
+      }
+    ],
+    // selected: [3,5]
+  });
+  return [200, data];
 });
 
 mock.onGet('/tree.json').reply((config) => {

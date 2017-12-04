@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div slot="header" class="header">
-      <span>{{mate.label}}</span>
+      <span>{{config.label}}</span>
     </div>
     <el-checkbox-group v-model="checked" @change="handleCheckedChange">
       <el-checkbox v-for="item in items" :label="item.id" :key="item.id">{{item.label}}</el-checkbox>
@@ -21,19 +21,19 @@ export default {
   },
   props: {
     /**
-     * mate = {id,label,children}
+     * config = {id,label,children}
      */
-    mate: Object,
+    config: Object,
     value: {
       type: Array,
       'default': () => { return []; }
     }
   },
   created () {
-    this.items = this.mate.children;
+    this.items = this.config.children;
     this.checked = [];
     if (this.value && this.value.length > 0) {
-      this.mate.children.forEach((v) => {
+      this.config.children.forEach((v) => {
         if (this.value.indexOf(Number(v.id)) > -1) this.checked.push(v.id);
       });
     }
@@ -46,7 +46,7 @@ export default {
       let value = [];
       if (checkedCount > 0 && checkedCount <= this.items.length) {
         value = this.checked.slice();
-        value.push(this.mate.id);
+        value.push(this.config.id);
       }
       return value;
     },
