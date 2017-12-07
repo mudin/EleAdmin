@@ -212,13 +212,14 @@ mock.onGet('/form.json').reply(200, {
       }
 
     ],
-    rules: {}
+    rules: {},
+    style: 'width: 460px;'
   }
 });
 
 mock.onGet('/table.json').reply((config) => {
   let rows = Mocker.mock({
-    'rows|15': [
+    'rows|10': [
       {
         'id|+1': 1,
         'name': '@name',
@@ -292,9 +293,9 @@ mock.onGet('/table.json').reply((config) => {
 mock.onGet('/table_next.json').reply((config) => {
   let first = config.params.page || 1;
   let data = Mocker.mock({
-    'rows|15': [
+    'rows|10': [
       {
-        'id|+1': first*15-14,
+        'id|+1': first*10-9,
         'name': '@name',
         'sex|1': true,
         'date': '@date'

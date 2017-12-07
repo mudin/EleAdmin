@@ -75,17 +75,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
   html, body {
     margin: 0;
+    padding: 0;
     height: 100%;
     width: 100%;
-    text-align: center;
     font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+    overflow:hidden;
   }
   #app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* text-align: center;*/
+    height: 100%;
+    display: flex;
   }
 </style>

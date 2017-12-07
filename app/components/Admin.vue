@@ -1,13 +1,15 @@
 <template>
-  <div class="layout">
-    <slider :menus="menus" @menu="handle"></slider>
-    <div class="main">
-      <div class="top">
+  <el-container>
+    <el-aside width="260px"><slider :menus="menus" @menu="handle">
+      <div class="logo" slot="logo"><i class="el-icon-menu"></i> {{config.title || '管理后台'}}</div>
+    </slider></el-aside>
+    <el-container>
+      <el-header height="62px">
         <span>{{mate.title || '后台'}}</span>
         <div class="user">
-          <el-dropdown @command="handle">
+          <el-dropdown @command="handle" @visible-change="setDropdownIcon">
             <span class="el-dropdown-link">
-              {{user.nickname||user.name}} <i class="el-icon-caret-bottom el-icon-setting"></i>
+              {{user.nickname||user.name}} <i :class="dropdownIcon"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="item" v-for="item in commands" :key="item.index">
@@ -16,12 +18,12 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-      </div>
-      <div class="content-main">
+      </el-header>
+      <el-main>
         <component :config="mate" v-bind:is="mate.view" @refresh="handle"></component>
-      </div>
-    </div>
-  </div>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -63,7 +65,8 @@ export default {
       },
       commands: [],
       menus: [],
-      mate: {}
+      mate: {},
+      dropdownIcon: 'el-icon-setting'
     };
   },
   created () {
@@ -89,12 +92,54 @@ export default {
         if (data.commands) this.commands = data.commands;
         if (data.config) this.mate = data.config;
       });
+    },
+    setDropdownIcon (i) {
+      this.dropdownIcon = (i ? 'el-icon-caret-bottom' : 'el-icon-setting');
     }
   }
 };
 </script>
 
 <style lang="less">
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+  .el-aside {
+    background-color: #545c64;
+    color: #333;
+    /* text-align: center;
+    line-height: 200px;*/
+
+    .el-menu {
+      border: 0;
+    }
+
+    .logo {
+      /* margin: 0 20px 30px 20px;
+      padding: 20px 20px 10px 20px; */
+      height: 60px;
+      color: #ffffff;
+      font-size: 20px;
+      border-bottom: 2px solid #c2c4ce;
+      line-height: 58px;
+      text-align: center;
+    }
+  }
+
+  .el-header {
+    background-color: #ffffff;
+    padding: 20px;
+    padding-right: 40px;
+    color: #474747;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 2px solid #545c64;
+
+    .user {
+      float: right;
+      color: #999999;
+    }
+  }
 @slider-width: 260px;
 @all-height: 790px;
 @all-width: 1440px;

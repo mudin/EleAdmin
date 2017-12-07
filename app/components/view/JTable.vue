@@ -71,7 +71,7 @@ export default {
       // 分页变量
       page: 0,
       rows: [],
-      pSize: 20,
+      pSize: 10,
       total: 0,
       selected: []
     };
