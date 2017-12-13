@@ -34,7 +34,7 @@ module.exports = {
     // 实时刷新
     inline: true,
 
-    setup: Middleware
+    before: Middleware
   },
 
   // 加载器
@@ -91,5 +91,8 @@ module.exports = {
     // ,new webpack.optimize.OccurrenceOrderPlugin()
     // ,new webpack.optimize.UglifyJsPlugin()
     // ,new ExtractTextPlugin("style.css")
+    // new webpack.DefinePlugin({
+    //   'process.env.NODE_ENV': JSON.stringify(env)
+    // })
   ]
 };

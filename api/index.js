@@ -17,11 +17,9 @@ window.httpServer = '';
 mock.onGet('/login.json').reply(200, {
   view: {
     name: 'login',
-    config: {
-      action: '/login.json',
-      title: 'EleAdmin后台',
-      verifyImgUrl: '/ver.jpg'
-    }
+    action: '/login.json',
+    title: 'EleAdmin后台',
+    verifyImgUrl: '/ver.jpg'
   },
   __trace__
 });
@@ -42,9 +40,7 @@ mock.onGet('/verify.js').reply((config) => {
 mock.onGet('/index.json').reply(200, {
   view: {
     name: 'admin',
-    config: {
-      url: '/admin.json'
-    }
+    url: '/admin.json'
   },
   __trace__
 });
@@ -135,8 +131,8 @@ mock.onGet('/module.json').reply(200, {
 });
 
 mock.onGet('/form.json').reply(200, {
-  config: {
-    view: 'JForm',
+  view: {
+    name: 'JForm',
     fields: [
       {
         label: '姓名',
@@ -230,8 +226,8 @@ mock.onGet('/table.json').reply((config) => {
   });
   console.log(rows);
   return [200, {
-    config: {
-      view: 'JTable',
+    view: {
+      name: 'JTable',
       btns: [
         { // 一个普通跳转按钮
           label: '添加',
@@ -323,8 +319,8 @@ mock.onGet('/tree.json').reply((config) => {
     return row;
   }
   return [200, {
-    config: {
-      view: 'JTree',
+    view: {
+      name: 'JTree',
       btns: [
         { // 一个普通跳转按钮
           label: '添加',

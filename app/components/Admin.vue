@@ -1,26 +1,26 @@
 <template>
   <el-container>
     <el-aside width="260px"><slider :menus="menus" @menu="handle">
-      <div class="logo" slot="logo"><i class="el-icon-menu"></i> {{config.title || '管理后台'}}</div>
+      <div class="logo" slot="logo"><i :class="logoIcon"></i> {{title}}</div>
     </slider></el-aside>
     <el-container>
       <el-header height="62px">
-        <span>{{mate.title || '后台'}}</span>
+        <span>{{viewTitle}}</span>
         <div class="user">
           <el-dropdown @command="handle" @visible-change="setDropdownIcon">
             <span class="el-dropdown-link">
-              {{user.nickname||user.name}} <i :class="dropdownIcon"></i>
+              {{username}} <i :class="dropdownIcon"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item :command="item" v-for="item in commands" :key="item.index">
-                <i class="el-icon-ion-ios-browsers"></i><span class="el-item">{{item.label}}</span>
+                <i :class="dropdownItemIcon"></i><span class="el-item">{{item.label}}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
       </el-header>
       <el-main>
-        <component :config="mate" v-bind:is="mate.view" @refresh="handle"></component>
+        <component :config="view" v-bind:is="view.name" @refresh="handle"></component>
       </el-main>
     </el-container>
   </el-container>
@@ -42,6 +42,9 @@ export default {
     },
     Simple: function index (resolve) {
       require(['./Simple.vue'], resolve);
+    },
+    Module: function index (resolve) {
+      require(['./module/Index.vue'], resolve);
     },
     //    KMelect: function index (resolve) {
     //      require(['./element/KMelect.vue'], resolve);
@@ -65,15 +68,29 @@ export default {
       },
       commands: [],
       menus: [],
-      mate: {},
+      view: {},
       dropdownIcon: 'el-icon-setting'
     };
   },
   created () {
-    this.mate = this.config;
     this.reload(this.config.url);
   },
   computed: {
+    logoIcon () {
+      return this.config.logoIcon || 'el-icon-menu';
+    },
+    title () {
+      return this.config.title || '管理后台';
+    },
+    viewTitle () {
+      return this.view.title || '首页';
+    },
+    username () {
+      return this.user.nickname || this.user.name;
+    },
+    dropdownItemIcon (item) {
+      return item.icon || 'el-icon-menu';
+    }
   },
   methods: {
     handle (cmd) {
@@ -86,11 +103,11 @@ export default {
       // 默认url
       if (url === true) url = this.config.url;
       // 获取框架信息
-      this.$root.ajaxer(url, {}).then((data) => {
-        if (data.user) this.user = data.user;
-        if (data.menus) this.menus = data.menus;
-        if (data.commands) this.commands = data.commands;
-        if (data.config) this.mate = data.config;
+      this.$root.ajaxer(url).then((response) => {
+        if (response.user) this.user = response.user;
+        if (response.menus) this.menus = response.menus;
+        if (response.commands) this.commands = response.commands;
+        if (response.view) this.view = response.view;
       });
     },
     setDropdownIcon (i) {

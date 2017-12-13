@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <component :config="view.config" v-bind:is="view.name"></component>
+    <component :config="view" v-bind:is="view.name"></component>
     <trace :trace="trace"></trace>
   </div>
 </template>
@@ -54,13 +54,11 @@ export default {
       let promise = self.$root.ajaxer(url, data).then((response) => {
         self.view = response.view || {
           name: 'Simple',
-          config: {
-            message: response.message
-          }
+          message: response.message
         };
         throw new Error('route');
       });
-      promise.catch((e) => {});
+      promise.catch(() => {});
       return promise;
     };
     // 启动

@@ -1,9 +1,9 @@
 <template>
-  <el-row class="el-item-line">
+  <el-row :class="{'el-item-line' : !isGroup}">
     <el-col :span="4" class="el-item" v-if="item.holder !== 'group'">{{label}}</el-col>
-    <el-col :span="((item.holder === 'group')? 24 : 20)" >
+    <el-col :span="(isGroup ? 24 : 20)" >
       <el-row v-for="(v, index) in local" :key="index">
-        <el-col :span="((item.holder === 'group')? 24 : 20)" class="el-item">
+        <el-col :span="(isGroup ? 24 : 20)" class="el-item">
           <el-switch         v-if="item.holder === 'switch'" v-model="local[index]"
                              :active-color="item.onColor||'#13ce66'"
                              :inactive-color="item.offColor||'#ff4949'"
@@ -87,6 +87,9 @@
       },
       btnIcon () {
         return 'el-icon-' + (this.disabled ? 'edit' : 'minus');
+      },
+      isGroup () {
+        return this.item.holder === 'group';
       }
     },
     methods: {

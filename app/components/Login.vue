@@ -77,7 +77,7 @@ export default {
       // this.$root.ajaxer(this.config.verifyUrl + '?random=' + Math.random()).then((data) => {
       //   this.verifyImg = data;
       // });
-      this.verifyImg = window.createUrl(this.config.verifyUrl + '?random=' + Math.random());
+      this.verifyImg = window.createUrl(this.config.verifyImgUrl + '?random=' + Math.random());
     }
   }
 };
