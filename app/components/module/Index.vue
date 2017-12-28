@@ -1,7 +1,7 @@
 <template>
 <div>
   <el-row type="flex" justify="center">
-    <el-col :span="18">
+    <el-col>
 
           <k-item
             :label="config.label"

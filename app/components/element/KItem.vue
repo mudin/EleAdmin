@@ -28,7 +28,7 @@
           ></el-input>
         </el-col>
         <el-col :span="4" class="el-item" v-if="item.holder !== 'group'">
-          <el-button :icon="btnIcon" :type="btnType" @click="handleRemove(index)" round size="mini"></el-button>
+          <el-button :icon="btnIcon" :type="btnType" @click="change(index)" round size="mini"></el-button>
         </el-col>
       </el-row>
       <el-row v-if="item.asArray" v-show="!disabled">
@@ -51,7 +51,7 @@
     },
     data () {
       return {
-        disabled: false,
+        disabled: true,
         // 本地值 local ===  value
         local: []
       };
@@ -65,6 +65,7 @@
       }
     },
     created () {
+      this.disabled = this.item.must !== true;
       this.defaultValue();
     },
     watch: {
@@ -108,12 +109,12 @@
         if (this.item.holder === 'group' || this.item.holder === 'pair') this.local.push({});
         else this.local.push(null);
       },
+      change (index) {
+        this.disabled = !this.disabled;
+        this.handleRemove(index);
+      },
       handleRemove (index) {
-        // 启动
-        if (this.disabled) {
-          this.disabled = false;
-          return;
-        }
+        if (!this.disabled) return;
         // 删除
         this.local.splice(index, 1);
         // 赋值为默认值用于占位并禁用
@@ -126,7 +127,6 @@
         // console.log('delete' + this.label + index);
       },
       actRemove () {
-        this.disabled = true;
         this.add();
         this.$emit('remove', this.label);
       }

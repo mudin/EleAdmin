@@ -3,10 +3,10 @@
     <div slot="header" style="height: 36px">
       <span style="float:left;">{{label}}</span>
       <span  style="float:right;">
-        <k-item-insert @extend="extend">添加</k-item-insert>
+        <k-item-insert @extend="extend" v-if="item.scalable">添加</k-item-insert>
         <el-button type="primary" @click="showValue">查看</el-button>
         <el-button type="primary" @click="handleShow">{{btnShow}}</el-button>
-        <el-button type="primary" @click="handleRemoveMe" v-if="item.notInsert !== true">删除</el-button>
+        <el-button type="primary" @click="handleRemoveMe" v-if="item.isInsert">删除</el-button>
       </span>
     </div>
     <div v-show="show">
@@ -15,7 +15,8 @@
               :label="ele.label||index"
               v-model="value[ele.label||index]"
               :key="index"
-              @remove="handleRemove"
+              @remove="removeItem"
+              v-if="itemVisible(ele)"
       ></k-item>
     </div>
   </el-card>
@@ -63,17 +64,26 @@
         this.show = !this.show;
       },
       handleRemoveMe () {
-        this.$emit('remove', this.label);
+        this.$emit('remove');
       },
-      handleRemove (label) {
+      removeItem (label) {
         this.$delete(this.value, label);
       },
       showValue () {
-        console.log(JSON.stringify(this.value));
+        this.$root.ajaxer(this.item.url, this.value, true).then((data) => {
+          this.$message({
+            type: 'success',
+            message: data.message
+          });
+        });
+        // console.log(JSON.stringify(this.value));
       },
       extend (schema) {
         if (!this.item.items) this.item.items = {};
         this.$set(this.item.items, schema.label, schema);
+      },
+      itemVisible (item) {
+        return !(item.on && this.value[item.on.label] !== item.on.value);
       }
     }
   };

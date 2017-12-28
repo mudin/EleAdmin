@@ -95,36 +95,35 @@ mock.onGet('/admin.json').reply(200, {
 mock.onGet('/module.json').reply(200, {
   view: {
     name: 'Module',
-    config: {
-      label: '模块',
-      item: {
-        holder: 'group',
-        items: {
-          name: {
-          },
-          password: {
-            holder: 'switch'
-          },
-          address: {
-            asArray: true
-          },
-          pwd: {
-            holder: 'switch',
-            asArray: true
-          },
-          from: {
-            holder: 'pair'
-          },
-          to: {
-            holder: 'select',
-            options: [{label: '太原', value: 31}, {label: '临汾', value: 32}, {label: '吉县', value: 33}],
-            asArray: true
-          }
+    label: '模块',
+    item: {
+      scalable: true,
+      holder: 'group',
+      items: {
+        name: {
+        },
+        password: {
+          holder: 'switch'
+        },
+        address: {
+          asArray: true
+        },
+        pwd: {
+          holder: 'switch',
+          asArray: true
+        },
+        from: {
+          holder: 'pair'
+        },
+        to: {
+          holder: 'select',
+          options: [{label: '太原', value: 31}, {label: '临汾', value: 32}, {label: '吉县', value: 33}],
+          asArray: true
         }
-      },
-      value: {
-        address: ['www', 'eee', 'kkk']
       }
+    },
+    value: {
+      address: ['www', 'eee', 'kkk']
     }
   },
   __trace__

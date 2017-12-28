@@ -21,7 +21,9 @@
     return {
       item: {
         items: {
-          '标签': {},
+          '标签': {
+            must: true
+          },
           '形式': {
             holder: 'select',
             options: [
@@ -36,7 +38,11 @@
           },
           '下拉选项': {
             holder: 'pair',
-            asArray: true
+            asArray: true,
+            on: {
+              label: '形式',
+              value: 'select'
+            }
           }
         },
         holder: 'group',
