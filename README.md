@@ -15,13 +15,21 @@
 > 截图
 
 登陆页面，实现了验证码实时验证
+
 ![登陆页面](https://gitee.com/uploads/images/2017/1229/070645_96c724ae_45533.jpeg "火狐截图_2017-12-28T22-51-29.jpg")
+
 管理页面，这是一个容器页面
+
 ![管理页面](https://gitee.com/uploads/images/2017/1229/065454_52ea97c1_45533.jpeg "火狐截图_管理.jpg")
+
 表单页面及后台发来的json，按照json自动生成的元素页面
+
 ![表单](https://gitee.com/uploads/images/2017/1229/070040_ed617ee4_45533.jpeg "表单.jpg")
+
 模块页可添加、删除项，简单的项联动也实现了
+
 ![模块](https://gitee.com/uploads/images/2017/1229/070441_729ba921_45533.jpeg "mokuai.jpg")
+
 
 ## Build Setup
 
