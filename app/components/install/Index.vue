@@ -1,31 +1,25 @@
 <template>
-<div>
-  <div id="install">
-    <main>
-      <!-- 主内容区 -->
-      <div  class="main" >
-        <div class="install-box">
-          <el-steps :space="200" :active="step" finish-status="success" :center="true">
-            <el-step title="安装协议" description=""></el-step>
-            <el-step title="完成安装" description=""></el-step>
+  <el-container id="install">
+        <el-header class="install-box">
+          <el-steps :space="200" :active="step" finish-status="success" align-center>
+            <el-step title="安装协议" description=""/>
+            <el-step title="完成安装" description=""/>
           </el-steps>
+        </el-header>
 
-          <div id="content">
-            <transition name="el-fade-in">
-              <component v-bind:is="view" @activeNext="activeNext" :value="value" @change="onChange"></component>
-            </transition>
-          </div>
+        <el-main id="content">
+          <transition name="el-fade-in">
+            <component v-bind:is="view" @activeNext="activeNext" :value="value" @change="onChange"/>
+          </transition>
+        </el-main>
 
-          <div class="but-group">
-            <el-button @click.native.prevent="handlePreStep" :disabled="!prev">上一步</el-button>
-            <el-button @click.native.prevent="handleNextStep" :disabled="!next" v-show="!isComplete">下一步</el-button>
-            <el-button @click.native.prevent="handleComplete" :disabled="!next" v-show=" isComplete">完成</el-button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-</div>
+        <el-footer class="but-group">
+          <el-button @click.native.prevent="handlePreStep" :disabled="!prev">上一步</el-button>
+          <el-button @click.native.prevent="handleNextStep" :disabled="!next" v-show="!isComplete">下一步</el-button>
+          <el-button @click.native.prevent="handleComplete" :disabled="!next" v-show=" isComplete">完成</el-button>
+        </el-footer>
+
+  </el-container>
 </template>
 
 <script>
@@ -110,26 +104,16 @@
 
 <style scoped>
   #install {
-    width: 1200px;
     margin: 0 auto;
     font-family: "Helvetica Neue","PingFang SC",Arial,sans-serif;
   }
-  main{
-    display: flex;
-    min-height: 800px;
-    border: solid 40px #E9ECF1;
-    background-color: #FCFCFC;
+
+  .el-header {
+
   }
-  main .main{
-    flex:1;
-    background-color: #fff;
-    padding: 50px 70px;
-  }
-  main .el-menu{
+
+  .main .el-menu{
     background-color: transparent!important;
-  }
-  #content {
-    margin: 50px;
   }
 
   /* 路由切换动效 */
@@ -148,6 +132,6 @@
     transform: translateY(30px);
   }
 
-  .install-box .but-group .el-button{margin-right: 20px;}
+  .but-group .el-button{margin-right: 20px;}
 </style>
 

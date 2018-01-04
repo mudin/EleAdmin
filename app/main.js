@@ -4,8 +4,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import Ajax from './minix/ajax.js';
 window.mockPath = '/element.php/admin/index/index';
-window.httpServer = 'http://192.168.0.253';
-require('../api/index.js');
+window.httpServer = 'http://192.168.21.163';
+// require('../api/index.js');
 
 Vue.use(ElementUI);
 
