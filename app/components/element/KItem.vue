@@ -4,31 +4,31 @@
     <el-col :span="(isGroup ? 24 : 20)" >
       <el-row v-for="(v, index) in local" :key="index">
         <el-col :span="(isGroup ? 24 : 20)" class="el-item">
-          <el-switch         v-if="item.holder === 'switch'" v-model="local[index]"
-                             :active-color="item.onColor||'#13ce66'"
-                             :inactive-color="item.offColor||'#ff4949'"
-                             :active-text="item.onText||'开启'"
-                             :inactive-text="item.offColor||'关闭'"
-                             :disabled="disabled"
+          <el-switch v-if="item.holder === 'switch'" v-model="local[index]"
+                     :active-color="item.onColor||'#13ce66'"
+                     :inactive-color="item.offColor||'#ff4949'"
+                     :active-text="item.onText||'开启'"
+                     :inactive-text="item.offColor||'关闭'"
+                     :disabled="disabled"
 
-          ></el-switch>
-          <k-pair       v-else-if="item.holder === 'pair'"   v-model="local[index]"
-                             :disabled="disabled"
-          ></k-pair>
+          />
+          <k-pair v-else-if="item.holder === 'pair'" v-model="local[index]"
+                  :disabled="disabled"
+          />
           <el-select    v-else-if="item.holder === 'select'" v-model="local[index]"
                         :disabled="disabled"
           >
-            <el-option :label="o.label" v-for="o in item.options" :value="o.value" :key="o.label"></el-option>
+            <el-option :label="o.label" v-for="o in item.options" :value="o.value" :key="o.label"/>
           </el-select>
-          <k-item-group v-else-if="item.holder === 'group'"  v-model="local[index]"
+          <k-item-group v-else-if="item.holder === 'group'" v-model="local[index]"
                         :item="item" :label="label" @remove="handleRemove(index)"
-          ></k-item-group>
-          <el-input        v-else="item.holder === 'input'"  v-model="local[index]"
-                           :disabled="disabled"
-          ></el-input>
+          />
+          <el-input v-else="item.holder === 'input'" v-model="local[index]"
+                    :disabled="disabled"
+          />
         </el-col>
         <el-col :span="4" class="el-item" v-if="item.holder !== 'group'">
-          <el-button :icon="btnIcon" :type="btnType" @click="change(index)" round size="mini"></el-button>
+          <el-button :icon="btnIcon" :type="btnType" @click="change(index)" round size="mini"/>
         </el-col>
       </el-row>
       <el-row v-if="item.asArray" v-show="!disabled">
@@ -65,7 +65,7 @@
       }
     },
     created () {
-      this.disabled = this.item.must !== true;
+      this.disabled = false;
       this.defaultValue();
     },
     watch: {

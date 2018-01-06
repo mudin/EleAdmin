@@ -2,13 +2,11 @@
 <div>
   <el-row type="flex" justify="center">
     <el-col>
-
-          <k-item
-            :label="config.label"
-            :value="config.value"
-            :item="config.item"
-          ></k-item>
-
+      <k-item
+        :label="config.label"
+        :value="config.value"
+        :item="config.item"
+      />
     </el-col>
   </el-row>
 </div>

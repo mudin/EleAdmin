@@ -17,7 +17,7 @@
               :key="index"
               @remove="removeItem"
               v-if="itemVisible(ele)"
-      ></k-item>
+      />
     </div>
   </el-card>
 </template>
