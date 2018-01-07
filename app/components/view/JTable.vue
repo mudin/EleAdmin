@@ -1,7 +1,7 @@
 <template>
   <Boxer :config="config" :hasSelected="hasSelected" @action="handleButton" ref="Boxer">
     <div slot="search" class="search">
-      <j-form :config="config.search" v-if="config.search" v-on:search="search"></j-form>
+      <j-form :config="config.search" v-if="config.search" v-on:search="search"/>
     </div>
     <div slot="main">
       <el-row>
@@ -10,20 +10,20 @@
                     @selection-change="handleSelectionChange" @sort-change="sortChange"
                     style="width: 100%"
           >
-              <el-table-column type="selection" width="50"></el-table-column>
-              <el-table-column v-for="col in config.columns" :key="col.label"
-                               :label="col.label" :prop="col.name"
-                               :width="col.width" :sortable="col.sortable"
-              ></el-table-column>
-              <el-table-column label="操作" :width="actionWidth" v-if="config.actions">
-                <template slot-scope="scope">
-                  <k-btn
-                         v-for="act in config.actions" :key="act.index"
-                         size="small" :act="act" :row="scope.row"
-                         @action="handleAction"
-                  ></k-btn>
-                </template>
-              </el-table-column>
+            <el-table-column type="selection" width="50"/>
+            <el-table-column v-for="col in config.columns" :key="col.label"
+                             :label="col.label" :prop="col.name"
+                             :width="col.width" :sortable="col.sortable"
+            />
+            <el-table-column label="操作" :width="actionWidth" v-if="config.actions">
+              <template slot-scope="scope">
+                <k-btn
+                  v-for="act in config.actions" :key="act.index"
+                  size="small" :act="act" :row="scope.row"
+                  @action="handleAction"
+                />
+              </template>
+            </el-table-column>
           </el-table>
         </el-col>
       </el-row>
@@ -41,9 +41,6 @@
     </div>
   </Boxer>
 </template>
-
-
-
 <script>
 import KBtn from '../element/KBtn.vue';
 import Boxer from './Boxer.vue';

@@ -6,7 +6,7 @@
         label="添加"
         v-model="value"
         :item="schema.item"
-      ></k-item>
+      />
       <span slot="footer">
         <el-button type="primary" @click="extend">插入</el-button>
       </span>

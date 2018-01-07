@@ -24,8 +24,7 @@
 
 <script>
   import License from './License.vue';
-  import Config from './Config.vue';
-  import Manage from './Manage.vue';
+
   export default {
     components: {
       License,

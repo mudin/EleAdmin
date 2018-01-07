@@ -1,6 +1,6 @@
 <template>
   <el-row :class="{'el-item-line' : !isGroup}">
-    <el-col :span="4" class="el-item" v-if="item.holder !== 'group'">{{label}}</el-col>
+    <el-col :span="4" class="el-item" v-if="!isGroup">{{label}}</el-col>
     <el-col :span="(isGroup ? 24 : 20)" >
       <el-row v-for="(v, index) in local" :key="index">
         <el-col :span="(isGroup ? 24 : 20)" class="el-item">
@@ -23,7 +23,7 @@
           <k-item-group v-else-if="item.holder === 'group'" v-model="local[index]"
                         :item="item" :label="label" @remove="handleRemove(index)"
           />
-          <el-input v-else="item.holder === 'input'" v-model="local[index]"
+          <el-input v-else v-model="local[index]"
                     :disabled="disabled"
           />
         </el-col>

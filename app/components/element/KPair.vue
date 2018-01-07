@@ -1,8 +1,10 @@
 <template>
   <el-row>
-    <el-col :span="10"><el-input v-model="pk" :disabled="disabled"></el-input></el-col>
+    <el-col :span="10">
+      <el-input v-model="pk" :disabled="disabled"/></el-col>
     <el-col :span="4" style="padding: 10px 20px 0 20px"><hr /></el-col>
-    <el-col :span="10"><el-input v-model="pv" :disabled="disabled"></el-input></el-col>
+    <el-col :span="10">
+      <el-input v-model="pv" :disabled="disabled"/></el-col>
   </el-row>
 </template>
 

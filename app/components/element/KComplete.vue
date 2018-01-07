@@ -7,12 +7,12 @@
       :placeholder="label"
       @select="handleSelect">
       <template slot="prepend">{{label}}</template>
-      <el-button slot="append" icon="plus" @click="dialog = true"></el-button>
+      <el-button slot="append" icon="plus" @click="dialog = true"/>
     </el-autocomplete>
     <el-dialog title="添加" v-model="dialog">
       <el-form>
         <el-form-item label="名称">
-          <el-input v-model="newName" auto-complete="off"></el-input>
+          <el-input v-model="newName" auto-complete="off"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

@@ -1,6 +1,6 @@
 <template>
   <div class="slider">
-    <slot name="logo"></slot>
+    <slot name="logo"/>
     <el-menu :unique-opened="true"
              background-color="#545c64"
              text-color="#fff"

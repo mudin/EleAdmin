@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <component :config="view" v-bind:is="view.name"></component>
-    <trace :trace="trace"></trace>
+    <component :config="view" v-bind:is="view.name"/>
+    <trace :trace="trace"/>
   </div>
 </template>
 
@@ -51,15 +51,13 @@ export default {
      * 返回Promise是为了统一返回值
      */
     this.$root.monitor = function (url = '', data = {}) {
-      let promise = self.$root.ajaxer(url, data).then((response) => {
+      return self.$root.ajaxer(url, data).then((response) => {
         self.view = response.view || {
           name: 'Simple',
           message: response.message
         };
         throw new Error('route');
-      });
-      promise.catch(() => {});
-      return promise;
+      }).catch(() => {});
     };
     // 启动
     this.$nextTick(() => {

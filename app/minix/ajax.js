@@ -120,39 +120,31 @@ export default {
       // 开启跨域cookie
       option.withCredentials = true;
 
-      // console.log('option:' + JSON.stringify(option));
       console.log('url:' + option.url);
 
       let self = this;
-      function onError (data, reject, message) {
-        if (reject) reject(data);
-        else {
-          self.$message({
-            type: 'warning',
-            message: data.message || message
-          });
-        }
-      }
-      return new Promise((resolve, reject) => {
-        $http(option).then((response) => {
-          let data = response.data;
-          // 判断返回结果信息
-          if ((function (data) {
-            if (typeof data !== 'object') return false;
-            if (data.status === false) return true;
-            return (data.status && Number(data.status) <= 0);
-          })(data)) {
-            onError(data, reject, '操作无效');
-          } else {
-            resolve(data);
-          }
-        }, (error) => {
-          onError(error, reject, '数据获取失败');
-        }).catch((error) => {
-          onError(error, reject, '操作失败');
+      function onError (data, message) {
+        self.$message({
+          type: 'warning',
+          message: data.message || message
         });
+      }
+      return $http(option).then((response) => {
+        let data = response.data;
+        // 判断返回结果信息
+        if ((function (data) {
+          if (typeof data !== 'object') return false;
+          if (data.status === false) return true;
+          return (data.status && Number(data.status) <= 0);
+        })(data)) {
+          onError(data, '操作无效');
+        } else {
+          return data;
+        }
+      }, (error) => {
+        onError(error, '数据获取失败');
       }).catch((error) => {
-        onError(error, null, '内部错误');
+        onError(error, '内部错误');
       });
     },
     /**

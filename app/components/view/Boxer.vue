@@ -3,12 +3,14 @@
     <el-row>
       <el-col :span="24">
         <div class="btn-block">
-          <div class="left"><k-btn v-for="btn in config.btns" :act="btn" :key="btn.label" :hasSelected="hasSelected" :plain="true" @action="handleButton"></k-btn></div>
-          <slot name="search"></slot>
+          <div class="left">
+            <k-btn v-for="btn in config.btns" :act="btn" :key="btn.label" :hasSelected="hasSelected" :plain="true"
+                   @action="handleButton"/></div>
+          <slot name="search"/>
         </div>
       </el-col>
     </el-row>
-    <slot name="main"></slot>
+    <slot name="main"/>
   </div>
 </template>
 
