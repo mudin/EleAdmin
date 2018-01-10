@@ -26,8 +26,8 @@ export default {
     hasSelected: Boolean
   },
   methods: {
-    handleButton (btn) {
-      this.$emit('action', btn);
+    handleButton (btn, row) {
+      this.$emit('action', btn, row);
     }
   }
 };

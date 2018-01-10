@@ -24,7 +24,10 @@ export default {
       let act = {url: url, post: true};
       return this.action(act, value).then((data) => {
         let to = (data && data.next) || next;
-        if (to) return this.$root.monitor(to);
+        if (to) {
+          this.$root.monitor(to);
+          return false;
+        }
         return data;
       });
     },

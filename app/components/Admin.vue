@@ -20,7 +20,7 @@
         </div>
       </el-header>
       <el-main>
-        <component :config="view" v-bind:is="view.name" @refresh="handle"></component>
+        <component :config="view" v-bind:is="view.name" @refresh="handle"/>
       </el-main>
     </el-container>
   </el-container>

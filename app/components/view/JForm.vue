@@ -1,4 +1,5 @@
 <script>
+  //TODO 还原Template模式
 export default {
   data () {
     return {
@@ -99,6 +100,7 @@ export default {
     }
 
     // form子节点创建函数
+    // console.log(this.fields);
     let children = this.fields.map((field) => {
       let attrs = {
         label: field.label,
@@ -135,25 +137,28 @@ export default {
     }
     // 表单属性
     let attrs = {};
+    // 传递
+    let props = {};
     // 索引
     let ref = 'ruleForm';
     // 内联样式
     if (!self.config.inline) {
       attrs['label-width'] = (typeof (this.config.labelWidth) === 'undefined') ? '20%' : self.config.labelWidth;
+    }else{
+      attrs['inline'] = true;
     }
     // 自定义样式
     if (self.config.style) attrs['style'] = self.config.style;
     attrs.size = 'small';
 
     // 传递值
-    attrs.value = this.values;
-    attrs.model = this.values;
+    props.model = self.values;
 
     attrs.rules = {};
     Object.assign(attrs.rules, this.config.rules);
     // 这里用于自身属性遍历
     Object.keys(attrs.rules).forEach((key) => {
-      attrs.rules[key].forEach((element) => {
+      (attrs.rules[key]).forEach((element) => {
         if (element.validator) element.validator = self[element.validator];
       });
     });
@@ -162,6 +167,7 @@ export default {
       'el-form',
       {
         attrs,
+        props,
         ref
       },
       children
@@ -264,8 +270,8 @@ export default {
   }
 
   .el-form--inline .el-form-item {
-    display: inline-block;
+    /*display: inline-block;*/
     margin-right: 10px;
-    vertical-align: top;
+    vertical-align: middle;
   }
 </style>

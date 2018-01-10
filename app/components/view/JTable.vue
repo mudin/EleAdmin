@@ -97,9 +97,10 @@ export default {
   // 需要添加刷新消息
   methods: {
     // 响应顶部按钮
-    handleButton (btn) {
-      let rows = (btn.multiSelect) ? {id: this.multipleSelection.map((r) => r.id)} : {};
-      this.$root.post(btn, rows, btn.next).then(() => {
+    handleButton (btnAction) {
+      if(btnAction.reload) return this.$emit('refresh', btnAction);
+      let rows = (btnAction.multiSelect) ? {id: this.multipleSelection.map((r) => r.id)} : {};
+      this.$root.action(btnAction, rows).then(() => {
         // 不跳转就刷新
         this.getData();
       });
