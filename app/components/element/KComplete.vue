@@ -86,7 +86,7 @@
         this.$emit('input', item.id);
       },
       update () {
-        this.$root.ajax(this.url, {name: this.newName}).then((data) => {
+        this.$root.ajax({url: this.url}, {name: this.newName}).then((data) => {
           if (data.item) {
             this.options.push(data.item);
             this.handleSelect(data.item);
@@ -98,7 +98,7 @@
   };
 </script>
 
-<style scope>
+<style scoped>
 .el-autocomplete {
   width: 100%;
 }

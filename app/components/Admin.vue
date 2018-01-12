@@ -1,13 +1,13 @@
 <template>
   <el-container>
-    <el-aside width="260px"><slider :menus="menus" @menu="handle">
+    <el-aside width="260px"><slider :menus="menus" @menu="monitor">
       <div class="logo" slot="logo"><i :class="logoIcon"></i> {{title}}</div>
     </slider></el-aside>
     <el-container>
       <el-header height="62px">
         <span>{{viewTitle}}</span>
         <div class="user">
-          <el-dropdown @command="handle" @visible-change="setDropdownIcon">
+          <el-dropdown @command="monitor" @visible-change="setDropdownIcon">
             <span class="el-dropdown-link">
               {{username}} <i :class="dropdownIcon"></i>
             </span>
@@ -20,7 +20,7 @@
         </div>
       </el-header>
       <el-main>
-        <component :config="view" v-bind:is="view.name" @refresh="handle"/>
+        <component :config="view" v-bind:is="view.name" @monitor="monitor"/>
       </el-main>
     </el-container>
   </el-container>
@@ -73,7 +73,7 @@ export default {
     };
   },
   created () {
-    this.reload(this.config.url);
+    this.reload(this.config);
   },
   computed: {
     logoIcon () {
@@ -93,17 +93,17 @@ export default {
     }
   },
   methods: {
-    handle (cmd) {
-      // 重载管理页面
-      if (cmd.reload) return this.reload(cmd.reload);
+    monitor (cmd) {
       // 跳转
-      this.$root.monitor(cmd.url, cmd.data);
+      if (cmd.exit) return this.$emit('monitor', cmd);
+      // 更新管理页面
+      this.reload(cmd);
     },
-    reload (url) {
+    reload (option) {
       // 默认url
-      if (url === true) url = this.config.url;
+      if (option.url === true) option.url = this.config.url;
       // 获取框架信息
-      this.$root.ajaxer(url).then((response) => {
+      this.$root.ajaxer(option).then((response) => {
         if (response.user) this.user = response.user;
         if (response.menus) this.menus = response.menus;
         if (response.commands) this.commands = response.commands;

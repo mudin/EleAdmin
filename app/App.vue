@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <component :config="view" v-bind:is="view.name"/>
+    <component :config="view" v-bind:is="view.name" @monitor="monitor"/>
     <trace :trace="trace"/>
   </div>
 </template>
@@ -40,32 +40,30 @@ export default {
    */
   created: function () {
     let self = this;
-    this.$root.ajaxer = function (url = '', data = {}, post = false) {
-      return self.$root.ajax(url, data, post).then((response) => {
+    this.$root.ajaxer = function (option = {}, value = null) {
+      return self.$root.ajax(option, value).then((response) => {
         self.trace = response.__trace__ || {};
         // 这里是为了级联then
         return response;
       });
     };
-    /**
-     * 返回Promise是为了统一返回值
-     */
-    this.$root.monitor = function (url = '', data = {}) {
-      return self.$root.ajaxer(url, data).then((response) => {
-        self.view = response.view || {
+    // 启动
+    this.$nextTick(() => {
+      self.monitor();
+    });
+  },
+  methods: {
+    monitor (option = {}, value = null) {
+      return this.$root.ajaxer(option, value).then((response) => {
+        this.view = response.view || {
           name: 'Simple',
           message: response.message
         };
         throw new Error('route');
       }).catch(() => {});
-    };
-    // 启动
-    this.$nextTick(() => {
-      self.$root.monitor();
-    });
+    }
   },
   beforeDestroy () {
-    delete this.$root.monitor;
     delete this.$root.ajaxer;
   }
 };

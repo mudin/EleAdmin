@@ -89,7 +89,7 @@
       },
       handleComplete () {
         this.$root.ajaxer(this.config.url, this.value, true).then(() => {
-          this.$root.monitor(this.config.admin);
+          this.$emit('monitor', this.config.admin);
         }, () => {
           this.handlePreStep();
         });

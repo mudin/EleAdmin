@@ -98,16 +98,17 @@ export default {
   methods: {
     // 响应顶部按钮
     handleButton (btnAction) {
-      if(btnAction.reload) return this.$emit('refresh', btnAction);
-      let rows = (btnAction.multiSelect) ? {id: this.multipleSelection.map((r) => r.id)} : {};
-      this.$root.action(btnAction, rows).then(() => {
-        // 不跳转就刷新
-        this.getData();
-      });
+      this.send(btnAction, (btnAction.multiSelect) ? {id: this.multipleSelection.map((r) => r.id)} : null);
     },
     // 响应行按钮
     handleAction (act, row) {
-      this.$root.action(act, {id: row.id}).then(() => {
+      this.send(act, {id: row.id});
+    },
+
+    send (act, value) {
+      this.$root.action(act, value, (act, value)=>{
+        this.$emit('monitor', act, value);
+      }, () => {
         // 不跳转就刷新
         this.getData();
       });

@@ -4,13 +4,13 @@
     <div class="ms-login">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0" class="demo-ruleForm">
         <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
+          <el-input v-model="ruleForm.username" placeholder="用户名"/>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" placeholder="密码" v-model="ruleForm.password"></el-input>
+          <el-input type="password" placeholder="密码" v-model="ruleForm.password"/>
         </el-form-item>
         <el-form-item prop="verify">
-          <el-input type="verify" placeholder="验证码" v-model="ruleForm.verify"></el-input>
+          <el-input type="verify" placeholder="验证码" v-model="ruleForm.verify"/>
         </el-form-item>
         <el-form-item>
           <img alt="点击切换" :src="verifyImg" @click="reloadVerify">
@@ -69,14 +69,13 @@ export default {
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
           this.ruleForm.password = md5(this.ruleForm.verify + md5(this.ruleForm.password));
-          this.$root.post(this.config.action, this.ruleForm);
+          this.$root.ajaxer({url: this.config.action, post: true}, this.ruleForm).then((data)=>{
+            this.$emit('monitor', {url: data.next});
+          });
         }
       });
     },
     reloadVerify () {
-      // this.$root.ajaxer(this.config.verifyUrl + '?random=' + Math.random()).then((data) => {
-      //   this.verifyImg = data;
-      // });
       this.verifyImg = window.createUrl(this.config.verifyImgUrl + '?random=' + Math.random());
     }
   }

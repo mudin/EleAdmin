@@ -57,7 +57,7 @@ export default {
               size: 'small'
             },
             on: {
-              action: vm.handleButton
+              action: vm.handleButton.bind(vm)
             }
           }));
         }
@@ -84,10 +84,15 @@ export default {
       return h('span', [h('span', node.data.label), h('div', {'class': {'line-row': true}}, cols)]);
     },
     getData () {
-      this.$root.ajax(this.config.dataApi);
+      this.$root.ajaxer(this.config).then((data)=>{
+        this.config.rows = data.rows;
+      });
     },
-    handleButton (btn, row) {
-      this.$root.action(btn, row).then(() => {
+    handleButton (act, value) {
+      this.$root.action(act, value, (act)=>{
+        this.$emit('monitor', act);
+      }, () => {
+        // 不跳转就刷新
         this.getData();
       });
     }
