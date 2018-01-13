@@ -4,7 +4,7 @@
       <span style="float:left;">{{label}}</span>
       <span  style="float:right;">
         <k-item-insert @extend="extend" v-if="item.scalable">添加</k-item-insert>
-        <el-button type="primary" @click="showValue">查看</el-button>
+        <el-button type="primary" @click="showValue">{{item.submitLabel||'提交'}}</el-button>
         <el-button type="primary" @click="handleShow">{{btnShow}}</el-button>
         <el-button type="primary" @click="handleRemoveMe" v-if="item.isInsert">删除</el-button>
       </span>

@@ -79,14 +79,10 @@ mock.onGet('/admin.json').reply(200, {
   ],
   commands: [
     {
-      index: '1',
-      label: '刷新',
-      reload: true
-    },
-    {
       index: '2',
       label: '登陆',
-      url: '/login.json'
+      url: '/login.json',
+      exit: true
     }
   ],
   __trace__
