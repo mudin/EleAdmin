@@ -84,12 +84,12 @@ export default {
       return h('span', [h('span', node.data.label), h('div', {'class': {'line-row': true}}, cols)]);
     },
     getData () {
-      this.$root.ajaxer(this.config).then((data)=>{
+      this.$root.ajaxer(this.config).then((data) => {
         this.config.rows = data.rows;
       });
     },
     handleButton (act, value) {
-      this.$root.action(act, value, (act)=>{
+      this.$root.action(act, value, (act) => {
         this.$emit('monitor', act);
       }, () => {
         // 不跳转就刷新

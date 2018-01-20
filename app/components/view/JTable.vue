@@ -14,7 +14,13 @@
             <el-table-column v-for="col in config.columns" :key="col.label"
                              :label="col.label" :prop="col.name"
                              :width="col.width" :sortable="col.sortable"
-            />
+            >
+              <template slot-scope="scope">
+                <a v-if="col.holder === 'link'" :href="scope.row[col.link]">{{scope.row[col.name]}}</a>
+                <template v-else-if="col.holder === 'switch'">{{getSwitchValue(col, scope.row[col.name])}}</template>
+                <template v-else>{{scope.row[col.name]}}</template>
+              </template>
+            </el-table-column>
             <el-table-column label="操作" :width="actionWidth" v-if="config.actions">
               <template slot-scope="scope">
                 <k-btn
@@ -101,12 +107,12 @@ export default {
       this.send(btnAction, (btnAction.multiSelect) ? {id: this.multipleSelection.map((r) => r.id)} : null);
     },
     // 响应行按钮
-    handleAction (act, row) {
-      this.send(act, {id: row.id});
+    handleAction (rowAction, row) {
+      this.send(rowAction, {id: row.id});
     },
 
     send (act, value) {
-      this.$root.action(act, value, (act, value)=>{
+      this.$root.action(act, value, (act, value) => {
         this.$emit('monitor', act, value);
       }, () => {
         // 不跳转就刷新
@@ -191,6 +197,13 @@ export default {
       this.page = 0;
       console.log('查询动作');
       this.getData();
+    },
+    getSwitchValue (col, is) {
+      if (typeof is === 'boolean' && col['active-text'] && col['inactive-text']) {
+        return is ? col['active-text'] : col['inactive-text'];
+      } else {
+        return is;
+      }
     }
   }
 };

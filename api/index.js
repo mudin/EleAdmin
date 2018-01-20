@@ -57,23 +57,26 @@ mock.onGet('/admin.json').reply(200, {
         {
           index: '11',
           label: '十里表单',
-          reload: '/table.json'
-        },
-        {
+          reload: true,
+          url: '/table.json'
+        }, {
           index: '12',
           label: '树状桃花',
-          reload: '/tree.json'
+          reload: true,
+          url: '/tree.json'
         }
       ]
     },
     {
       index: '2',
       label: '花开表单',
-      reload: '/form.json'
+      reload: true,
+      url: '/form.json'
     },
     {
       index: '3',
       label: '模块系统',
+      reload: true,
       url: '/module.json'
     }
   ],
@@ -82,7 +85,6 @@ mock.onGet('/admin.json').reply(200, {
       index: '2',
       label: '登陆',
       url: '/login.json',
-      exit: true
     }
   ],
   __trace__
@@ -243,12 +245,15 @@ mock.onGet('/table.json').reply((config) => {
       columns: [
         {
           label: '姓名',
-          holder: 'text',
-          name: 'name'
+          holder: 'link',
+          name: 'name',
+          link: 'date'
         },
         {
           label: '性别',
           holder: 'switch',
+          'active-text': '男',
+          'inactive-text': '女',
           name: 'sex'
         },
         {

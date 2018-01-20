@@ -70,7 +70,7 @@
         this.$delete(this.value, label);
       },
       showValue () {
-        this.$root.ajaxer(this.item.url, this.value, true).then((data) => {
+        this.$root.ajaxer(this.item.cmd, this.value).then((data) => {
           this.$message({
             type: 'success',
             message: data.message

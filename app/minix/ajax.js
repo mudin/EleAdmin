@@ -12,44 +12,14 @@ export default {
       if (window.createUrl) return window.createUrl(url);
       return url;
     },
-    /**
-     * 基础接口 POST函数
-     *
-     * @param url 提交地址
-     * @param value 参数
-     * @param next 提交后跳转地址
-     *
-     */
-    // post (url, value = {}, next = false) {
-    //   let act = {url: url, post: true};
-    //   return this.action(act, value).then((data) => {
-    //     let to = (data && data.next) || next;
-    //     if (to) {
-    //       this.$root.monitor(to);
-    //       return false;
-    //     }
-    //     return data;
-    //   });
-    // },
 
     /**
-     * 基础接口 GET函数
-     *
-     * @param act
-     * @param value
-     *
-     * @return Promise
+     * 添加提示的Action
      *
      */
-    handleAction (act, value = null) {
+    warningAction (act, value = null, cbRedirect = null, onSuccess = null) {
       /**
        * 提示动作
-       *
-       * @param config
-       * @param func
-       *
-       * @return Promise
-       *
        */
       let handle = (config, func) => {
         return this.$confirm(config.msg, '提示', {
@@ -65,10 +35,10 @@ export default {
       };
       if (act.confirm) {
         return handle(act.confirm, () => {
-          return this.action(act, value);
+          return this.action(act, value, cbRedirect, onSuccess);
         });
       } else {
-        return this.action(act, value);
+        return this.action(act, value, cbRedirect, onSuccess);
       }
     },
 
@@ -76,8 +46,10 @@ export default {
      * 分装的处理函数
      *
      * @param {Object} act - 动作描述
-     * @param {Function} callback
-     * @param {Function} onSuccess
+     *
+     * @param {Function} cbRedirect
+     * @param {Function} onSuccess 后续动作
+     *
      * @param {bool} act.post - 是否是表单方式
      * @param {string} act.url - 目标地址
      * @param act.api - 在线提交+参数过滤
@@ -86,7 +58,7 @@ export default {
      *
      *
      */
-    action (act, value = null, callback = null, onSuccess = null) {
+    action (act, value = null, cbRedirect = null, onSuccess = null) {
       // 用于form提交
       if (act.post) {
         return this.ajax(act, value).then(onSuccess);
@@ -98,13 +70,12 @@ export default {
         return this.ajax(act, value).then(onSuccess);
       }
 
-      if(!callback) return;
+      if (!cbRedirect) return;
 
       // 带id跳转
       if (act.key) value = queryStringFilter(value, act.key);
 
-      return callback(act, value);
-
+      return cbRedirect(act, value);
     },
 
     /**
@@ -112,7 +83,7 @@ export default {
      *
      * @param {string} url - 目标地址
      * @param {Object} value - 参数
-     * @param {bool} [post = false] - 是否是表单方式
+     * @param {boolean} [post = false] - 是否是表单方式
      *
      * @return {Promise.<T>}
      */
@@ -156,16 +127,7 @@ export default {
       }).catch((error) => {
         onError(error, '内部错误');
       });
-    },
-
-    /**
-     * 直接跳转
-     *
-     * @param url 目标跳转地址
-     */
-    // location (url) {
-    //   window.location.href = url;
-    // }
+    }
   }
 };
 

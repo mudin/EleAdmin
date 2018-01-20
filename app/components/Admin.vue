@@ -52,9 +52,9 @@ export default {
     //    Apple: function index (resolve) {
     //      require(['./Apple.vue'], resolve);
     //    },
-    //    Chart: function index (resolve) {
-    //      require(['./element/KChart.vue'], resolve);
-    //    },
+    Chart: function (resolve) {
+      require(['./element/KChart.vue'], resolve);
+    },
     Slider
   },
   props: {
@@ -99,11 +99,11 @@ export default {
       // 更新管理页面
       this.reload(cmd);
     },
-    reload (option) {
+    reload (cmd) {
       // 默认url
-      if (option.url === true) option.url = this.config.url;
+      if (cmd.url === true) cmd.url = this.config.url;
       // 获取框架信息
-      this.$root.ajaxer(option).then((response) => {
+      this.$root.ajaxer(cmd).then((response) => {
         if (response.user) this.user = response.user;
         if (response.menus) this.menus = response.menus;
         if (response.commands) this.commands = response.commands;

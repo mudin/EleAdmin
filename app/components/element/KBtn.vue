@@ -1,7 +1,7 @@
 <template>
   <el-button :size="size" :disabled="btnDisable"
     :type="getSwitchValue('type')"
-    @click="handleAction"
+    @click="onClick"
     :plain="plain">
     {{getSwitchValue('label')}}
   </el-button>
@@ -54,7 +54,7 @@
     },
     // 需要添加刷新消息
     methods: {
-      handleAction () {
+      onClick () {
         this.act.url = this.getSwitchValue('url');
         this.$emit('action', this.act, this.row);
       },
