@@ -27,9 +27,7 @@
 
   export default {
     components: {
-      License,
-      Config,
-      Manage
+      License
     },
     props: {
       config: Object
@@ -88,7 +86,7 @@
         }
       },
       handleComplete () {
-        this.$root.ajaxer(this.config.url, this.value, true).then(() => {
+        this.$root.ajaxer({url: this.config.url}, this.value, true).then(() => {
           this.$emit('monitor', this.config.admin);
         }, () => {
           this.handlePreStep();
