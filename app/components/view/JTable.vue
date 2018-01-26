@@ -108,11 +108,13 @@ export default {
     },
     // 响应行按钮
     handleAction (rowAction, row) {
+      console.log(row);
       this.send(rowAction, {id: row.id});
     },
 
     send (act, value) {
       this.$root.action(act, value, (act, value) => {
+        console.log(value);
         this.$emit('monitor', act, value);
       }, () => {
         // 不跳转就刷新

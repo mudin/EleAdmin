@@ -93,17 +93,17 @@ export default {
     }
   },
   methods: {
-    monitor (cmd) {
+    monitor (cmd, value = null) {
       // 跳转
-      if (cmd.exit) return this.$emit('monitor', cmd);
+      if (cmd.exit) return this.$emit('monitor', cmd, value);
       // 更新管理页面
-      this.reload(cmd);
+      this.reload(cmd, value);
     },
-    reload (cmd) {
+    reload (cmd, value = null) {
       // 默认url
       if (cmd.url === true) cmd.url = this.config.url;
       // 获取框架信息
-      this.$root.ajaxer(cmd).then((response) => {
+      this.$root.ajaxer(cmd, value).then((response) => {
         if (response.user) this.user = response.user;
         if (response.menus) this.menus = response.menus;
         if (response.commands) this.commands = response.commands;
