@@ -68,8 +68,12 @@ export default {
     submit () {
       this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
-          this.ruleForm.password = md5(this.ruleForm.verify + md5(this.ruleForm.password));
-          this.$root.ajaxer({url: this.config.action, post: true}, this.ruleForm).then((data)=>{
+          let value = {
+            username: this.ruleForm.username,
+            password: md5(this.ruleForm.verify + md5(this.ruleForm.password)),
+            verify: this.ruleForm.verify
+          };
+          this.$root.ajaxer({url: this.config.action, post: true}, value).then((data)=>{
             this.$emit('monitor', {url: data.next});
           });
         }

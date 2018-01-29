@@ -7,7 +7,7 @@
       <el-header height="62px">
         <span>{{viewTitle}}</span>
         <div class="user">
-          <el-dropdown @command="monitor" @visible-change="setDropdownIcon">
+          <el-dropdown @command="exeCommand" @visible-change="setDropdownIcon">
             <span class="el-dropdown-link">
               {{username}} <i :class="dropdownIcon"></i>
             </span>
@@ -93,6 +93,9 @@ export default {
     }
   },
   methods: {
+    exeCommand (cmd) {
+      this.monitor(cmd);
+    },
     monitor (cmd, value = null) {
       // 跳转
       if (cmd.exit) return this.$emit('monitor', cmd, value);
