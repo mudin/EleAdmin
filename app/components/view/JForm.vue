@@ -233,7 +233,7 @@
           // 内联搜索表单
             if (this.config.inline) {
               this.$emit('search', this.values);
-              this.$refs.ruleForm.resetFields();
+              // this.$refs.ruleForm.resetFields();
               return;
             }
 

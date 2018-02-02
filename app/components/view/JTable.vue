@@ -76,22 +76,23 @@ export default {
       rows: [],
       pSize: 10,
       total: 0,
-      selected: []
+      selected: [],
+      isFresh: false
     };
   },
   created () {
-    this.updateData(this.config);
+    this.freshTable(this.config);
   },
   watch: {
     config  (newConfig) {
       this.$nextTick(() => {
-        this.updateData(newConfig);
+        this.freshTable(newConfig);
       });
     }
   },
   computed: {
     actionWidth () {
-      return this.config.actions.length * 60 + 30;
+      return this.config.actions.length * 60 + 60;
     },
     hasSelected () {
       return (this.multipleSelection.length !== 0);
@@ -108,13 +109,13 @@ export default {
     },
     // 响应行按钮
     handleAction (rowAction, row) {
-      console.log(row);
+      // console.log(row);
       this.send(rowAction, {id: row.id});
     },
 
     send (act, value) {
       this.$root.action(act, value, (act, value) => {
-        console.log(value);
+        // console.log(value);
         this.$emit('monitor', act, value);
       }, () => {
         // 不跳转就刷新
@@ -150,34 +151,36 @@ export default {
      * 相应翻页动作
      */
     handleCurrentChange (val) {
+      if (this.isFresh) return this.isFresh = false;
       console.log('翻页动作');
-      this.page = val;
+      // this.page = val;
       this.getData();
     },
     /**
      * 重新远程获取数据
      */
     getData () {
-      // console.log(this.config.dataApi);
-      let url = this.config.dataApi;
       let param = {
         search: this.searchValues,
         page: this.page,
         sort: this.sortValues
       };
       this.$refs.table.clearSelection();
-      this.$root.ajaxer(url, param).then((data) => {
-        this.updateData(data);
+      this.$root.ajaxer({url: this.config.dataApi}, param).then((data) => {
+        this.freshTable(data);
       });
     },
     /**
      * 刷新数据
      */
-    updateData (data) {
+    freshTable (data) {
       if (data.rows) this.rows = data.rows;
       if (data.total) this.total = data.total;
       this.selected = data.selected || [];
-      if (data.size) this.pSize = data.size;
+      if (data.size) {
+        this.pSize = data.size;
+        this.isFresh = true;
+      }
       this.$nextTick(() => { this.rowSelect(); });
     },
     /**
@@ -187,6 +190,7 @@ export default {
       if (!sort || !sort.column || !sort.column.sortable) return;
       this.sortValues = {order: sort.order, column: sort.prop};
       console.log('排序动作');
+      this.page = 0;
       this.getData();
     },
     /**
@@ -195,9 +199,10 @@ export default {
      * @param data 查询参数
      */
     search (data) {
+      // let search = JSON.parse(JSON.stringify(data));
       this.searchValues = data;
-      this.page = 0;
       console.log('查询动作');
+      this.page = 0;
       this.getData();
     },
     getSwitchValue (col, is) {

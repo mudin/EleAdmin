@@ -40,6 +40,13 @@ export default {
    */
   created: function () {
     let self = this;
+    /**
+     * 提取调试信息
+     *
+     * @param option
+     * @param value
+     * @return {Promise<T>}
+     */
     this.$root.ajaxer = function (option = {}, value = null) {
       return self.$root.ajax(option, value).then((response) => {
         self.trace = response.__trace__ || {};

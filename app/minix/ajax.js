@@ -101,6 +101,10 @@ export default {
       // 开启跨域cookie
       option.withCredentials = true;
 
+      option.paramsSerializer = function(params){
+        return Qs.stringify(params,{arrayFormat:'brackets'})
+      };
+
       console.log('url:' + option.url);
 
       let self = this;

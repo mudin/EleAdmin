@@ -5,7 +5,7 @@ import App from './App.vue';
 import Ajax from './minix/ajax.js';
 window.mockPath = '/element.php/admin/index/index';
 window.httpServer = 'http://192.168.0.253';
-require('../api/index.js');
+// require('../api/index.js');
 
 Vue.use(ElementUI);
 
