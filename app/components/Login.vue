@@ -28,7 +28,7 @@ import md5 from './md5.min.js';
 export default {
   data () {
     let validateAjax = (rule, value, callback) => {
-      this.$root.ajaxer(this.config.checkUrl, {value}).then(() => {
+      this.$root.ajaxer({url: this.config.checkUrl}, {value}).then(() => {
         callback();
       }, () => {
         callback(new Error('验证失败'));
@@ -73,7 +73,7 @@ export default {
             password: md5(this.ruleForm.verify + md5(this.ruleForm.password)),
             verify: this.ruleForm.verify
           };
-          this.$root.ajaxer({url: this.config.action, post: true}, value).then((data)=>{
+          this.$root.ajaxer({url: this.config.action, post: true}, value).then((data) => {
             this.$emit('monitor', {url: data.next});
           });
         }
