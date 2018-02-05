@@ -37,7 +37,7 @@
       <el-col :span="12">
         <el-pagination
           @current-change="handleCurrentChange"
-          :current-page="page"
+          :current-page.sync="page"
           layout="total,prev, pager, next"
           :total="total"
           :page-size ="pSize">
@@ -50,6 +50,27 @@
 <script>
 import KBtn from '../element/KBtn.vue';
 import Boxer from './Boxer.vue';
+
+/**
+ * 请求对象
+ *
+ * @param {Function} funcRefresh
+ * @constructor
+ */
+function Request (funcRefresh = null) {
+  // 请求参数
+  this.params = {};
+  this.param = (key, value) => {
+    // 防止不必要的查询
+    if (this.params[key] === value) return;
+    // 记录动作
+    this.params[key] = value;
+    // 非翻页动作， 页码重置为首页
+    if(key !== 'page') this.params.page = 1;
+    // 刷新动作
+    if(funcRefresh) funcRefresh();
+  };
+}
 
 export default {
   components: {
@@ -72,16 +93,18 @@ export default {
       sortValues: {},
       action: null,
       // 分页变量
-      page: 0,
+      page: 1,
       rows: [],
       pSize: 10,
       total: 0,
-      selected: [],
-      isFresh: false
+      selected: []
     };
   },
   created () {
     this.freshTable(this.config);
+    // 设置刷新动作
+    this.request = new Request(this.getData);
+
   },
   watch: {
     config  (newConfig) {
@@ -112,12 +135,16 @@ export default {
       // console.log(row);
       this.send(rowAction, {id: row.id});
     },
-
+    /**
+     * 执行按钮动作
+     */
     send (act, value) {
       this.$root.action(act, value, (act, value) => {
-        // console.log(value);
         this.$emit('monitor', act, value);
       }, () => {
+        // 跳转指令
+        if(act.next) return this.$emit('monitor', {url: act.next, exit: Boolean(act.exit)});
+
         // 不跳转就刷新
         this.getData();
       });
@@ -129,7 +156,7 @@ export default {
       // 没有选择行
       if (!(this.selected)) return;
       // 有选择行
-      this.config.rows.forEach(row => {
+      this.rows.forEach(row => {
         let select = (
           row.id &&
           (this.selected.findIndex((id) => {
@@ -151,22 +178,33 @@ export default {
      * 相应翻页动作
      */
     handleCurrentChange (val) {
-      if (this.isFresh) return this.isFresh = false;
       console.log('翻页动作');
-      // this.page = val;
-      this.getData();
+      this.request.param('page', val);
+    },
+    /**
+     * 排序动作
+     */
+    sortChange (sort) {
+      if (!sort || !sort.column || !sort.column.sortable) return;
+      console.log('排序动作');
+      this.request.param('sort', {order: sort.order, column: sort.prop});
+    },
+    /**
+     * 查询时 页面自动重置
+     *
+     * @param data 查询参数
+     */
+    search (data) {
+      console.log('查询动作');
+      this.request.param('search', Object.assign({}, data));
     },
     /**
      * 重新远程获取数据
      */
     getData () {
-      let param = {
-        search: this.searchValues,
-        page: this.page,
-        sort: this.sortValues
-      };
       this.$refs.table.clearSelection();
-      this.$root.ajaxer({url: this.config.dataApi}, param).then((data) => {
+      this.$root.ajaxer({url: this.config.dataApi}, this.request.params).then((data) => {
+        this.page = this.request.params.page;
         this.freshTable(data);
       });
     },
@@ -177,34 +215,18 @@ export default {
       if (data.rows) this.rows = data.rows;
       if (data.total) this.total = data.total;
       this.selected = data.selected || [];
-      if (data.size) {
-        this.pSize = data.size;
-        this.isFresh = true;
-      }
+      if (data.size !== this.pSize) this.pSize = data.size;
+
       this.$nextTick(() => { this.rowSelect(); });
     },
+
     /**
-     * 排序动作
-     */
-    sortChange (sort) {
-      if (!sort || !sort.column || !sort.column.sortable) return;
-      this.sortValues = {order: sort.order, column: sort.prop};
-      console.log('排序动作');
-      this.page = 0;
-      this.getData();
-    },
-    /**
-     * 查询时 页面自动重置
+     * switch控件标签
      *
-     * @param data 查询参数
+     * @param col
+     * @param is
+     * @return {*}
      */
-    search (data) {
-      // let search = JSON.parse(JSON.stringify(data));
-      this.searchValues = data;
-      console.log('查询动作');
-      this.page = 0;
-      this.getData();
-    },
     getSwitchValue (col, is) {
       if (typeof is === 'boolean' && col['active-text'] && col['inactive-text']) {
         return is ? col['active-text'] : col['inactive-text'];

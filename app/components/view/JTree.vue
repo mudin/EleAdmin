@@ -89,9 +89,11 @@ export default {
       });
     },
     handleButton (act, value) {
-      this.$root.action(act, value, (act) => {
-        this.$emit('monitor', act);
+      this.$root.action(act, value, (act, value) => {
+        this.$emit('monitor', act, value);
       }, () => {
+        // 跳转指令
+        if(act.next) return this.$emit('monitor', {url: act.next, exit: Boolean(act.exit)});
         // 不跳转就刷新
         this.getData();
       });
