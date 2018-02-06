@@ -84,7 +84,7 @@ export default {
       return h('span', [h('span', node.data.label), h('div', {'class': {'line-row': true}}, cols)]);
     },
     getData () {
-      this.$root.ajaxer(this.config).then((data) => {
+      this.$root.ajaxer({url: this.config.dataApi}).then((data) => {
         this.config.rows = data.rows;
       });
     },

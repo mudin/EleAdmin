@@ -7,7 +7,6 @@
       <el-checkbox v-for="item in items" :label="item.id" :key="item.id">{{item.label}}</el-checkbox>
     </el-checkbox-group>
   </el-card>
-
 </template>
 
 <script>
