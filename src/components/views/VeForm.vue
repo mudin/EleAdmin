@@ -22,6 +22,10 @@ export default {
   props: {
     view: Object,
     value: Object,
+    onSubmit: {
+      type: Function,
+      default: null,
+    },
   },
   data() {
     const rules = {};
@@ -68,8 +72,9 @@ export default {
 
           // POST提交后跳转
           const url = this.view.url;
+          if (this.onSubmit) this.formdata = this.onSubmit(this.formdata);
           return this.$HttpPost(url, this.formdata).then((data) => {
-            this.$root.$EventBus.emit(this.view.redirect || 'Admin', { url: data.next || this.view.next });
+            this.$root.$EventBus.emit(this.view.redirect || 'Admin', { url: data.data.next || this.view.next });
           });
         }
         return this.$notify.error({
@@ -99,4 +104,3 @@ export default {
   },
 };
 </script>
-

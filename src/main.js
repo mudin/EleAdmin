@@ -7,12 +7,12 @@ import App from './App';
 import Http from './Util/Http';
 import EventBus from './Util/EventBus';
 
-window.host = '/';
-window.index = 'index.json';
+window.host = 'http://192.168.0.163';
+window.index = '/element.php/admin/index/index';
 
-require('./api/mock');
+// require('./api/mock');
 
-Vue.createUrl = url => (url || window.host + window.index);
+Vue.createUrl = url => window.host + (url || window.index);
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

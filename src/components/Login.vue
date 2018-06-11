@@ -2,21 +2,25 @@
   <div class="login-view">
     <h1 class="login-title">{{title}}</h1>
     <ve-form :view="form" :value="value"
-    class="login-form" />
+    class="login-form" :onSubmit = 'onSubmit'/>
   </div>
 </template>
 
 <script>
-import DemoForm from './views/DemoForm';
 import VeForm from './views/VeForm';
+
+const U = require('../Util/Md5.js');
+
+// console.log(md5);
 
 export default {
   props: ['view'],
   data() {
+    const self = this;
     return {
-      title: 'VeAdmin管理后台',
+      title: self.view.title || 'VeAdmin管理后台',
       form: {
-        url: '/login.json',
+        url: self.view.url,
         fields: [
           {
             index: 'user-name',
@@ -24,8 +28,6 @@ export default {
             name: 'name',
             colWidth: 200,
             sortable: true,
-            editable: true,
-            editUrl: '/table/edit/name.json',
           }, {
             index: 'user-password',
             label: '密码',
@@ -38,10 +40,10 @@ export default {
             name: 'verify',
             colWidth: 100,
             holder: 'verify',
-            url: '/verify.json',
+            url: self.view.verifyImgUrl,
             rule: [
               { required: true, message: '请输入验证码', trigger: 'blur' },
-              { validator: 'validateAsync', trigger: 'blur', url: '/verify/check.json' },
+              { validator: 'validateAsync', trigger: 'blur', url: self.view.verifyCheckUrl },
             ],
           },
         ],
@@ -51,10 +53,14 @@ export default {
     };
   },
   components: {
-    DemoForm,
     VeForm,
   },
   methods: {
+    onSubmit(data) {
+      // eslint-disable-next-line
+      data.password = U.md5(data.verify.toLowerCase() + U.md5(data.password));
+      return data;
+    },
   },
 };
 </script>

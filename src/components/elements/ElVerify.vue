@@ -19,8 +19,9 @@ export default {
     },
   },
   data() {
+    const src = this.$HttpUrl(this.url);
     return {
-      src: '',
+      src,
     };
   },
   computed: {
@@ -33,14 +34,9 @@ export default {
       },
     },
   },
-  created() {
-    this.reload();
-  },
   methods: {
     reload() {
-      this.$HttpGet(this.url, { random: Math.random() }).then((src) => {
-        this.src = src;
-      });
+      this.src = `${this.src}/?random=${Math.random()}`;
     },
   },
 };

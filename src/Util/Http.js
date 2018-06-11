@@ -37,18 +37,6 @@ class Http {
   static createUrl = url => url;
 
   /**
-   * 全局错误提示
-   * @param {Error} error 错误信息
-   * @param {string} message 错误信息
-   */
-  static onError(error, message = '') {
-    return this.vue.$message && this.vue.$message({
-      type: 'warning',
-      message: error.message || message,
-    });
-  }
-
-  /**
    * 参数过滤,过滤没用的GET参数
    *
    * @param {string} value 原参数
@@ -88,15 +76,8 @@ class Http {
     console.log('send', option);
     return $http(option).then((response) => {
       const data = response.data;
-      // 判断返回结果信息
-      if ((function isError(v) {
-        if (typeof v !== 'object') return false;
-        if (v.status === false) return true;
-        return (v.status && Number(v.status) <= 0);
-      })(data)) return Http.onError(data, '操作无效');
       return Http.onReceive(data);
-    }, error => Http.onError(error, '数据获取失败'))
-      .catch(error => Http.onError(error, '内部错误'));
+    }).catch();
   };
 
   /**
@@ -118,6 +99,7 @@ class Http {
 
     this.createUrl = this.vue.createUrl || (url => url);
 
+    this.vue.prototype.$HttpUrl = url => this.createUrl(url);
     this.vue.prototype.$HttpGet = (url, value = null) => this.HttpSend({ url, value });
     this.vue.prototype.$HttpPost = (url, value = null) => this.HttpSend({ url, value, post: true });
     this.vue.prototype.$HttpSend = Http.HttpSend;

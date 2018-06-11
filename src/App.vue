@@ -37,7 +37,7 @@ export default {
     this.$root.$EventBus.on('App', this.onRedirect);
     // 启动时显示的默认页面
     this.$nextTick(() => {
-      this.$HttpGet().then(data => this.onRedirect(data));
+      this.onRedirect({ url: window.index });
     });
   },
   components: {
