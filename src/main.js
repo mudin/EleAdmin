@@ -7,7 +7,7 @@ import App from './App';
 import Http from './Util/Http';
 import EventBus from './Util/EventBus';
 
-window.host = 'http://192.168.0.163';
+window.host = 'http://192.168.0.253';
 window.index = '/element.php/admin/index/index';
 
 // require('./api/mock');
