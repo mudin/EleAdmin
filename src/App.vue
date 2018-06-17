@@ -22,9 +22,18 @@ export default {
     };
   },
   created() {
+    // 挂载跳转处理器
+    this.$root.$EventBus.on('App', this.onRedirect);
+    // 挂载调试信息处理器
     this.$addReceiver((data) => {
+      // 跳转处理
+      if (data.redirect) {
+        this.onRedirect(data.redirect);
+        return false;
+      }
       // 捕获调试信息
       if (data.trace) this.trace = data.trace;
+
       // 捕获提示信息
       if (data.message) {
         this.$message({
@@ -33,8 +42,8 @@ export default {
           type: data.message.type,
         });
       }
+      return true;
     });
-    this.$root.$EventBus.on('App', this.onRedirect);
     // 启动时显示的默认页面
     this.$nextTick(() => {
       this.onRedirect({ url: window.index });
@@ -46,9 +55,6 @@ export default {
     Login,
   },
   methods: {
-    passUp() {
-      return false;
-    },
   },
 };
 </script>

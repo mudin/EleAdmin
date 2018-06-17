@@ -7,7 +7,9 @@ import App from './App';
 import Http from './Util/Http';
 import EventBus from './Util/EventBus';
 
+// 后台服务器地址
 window.host = 'http://192.168.0.253';
+// 服务器入口
 window.index = '/element.php/admin/index/index';
 
 // require('./api/mock');

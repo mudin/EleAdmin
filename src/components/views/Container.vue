@@ -6,11 +6,16 @@ export default {
     };
   },
   methods: {
+    /**
+     * 发送跳转动作
+     */
     redirect(action) {
-      this.$root.$EventBus.emit(action.redirect || 'Admin', action);
+      this.$root.$EventBus.emit(action.layer || 'Admin', action);
     },
+    /**
+     * 执行跳转
+     */
     onRedirect(action) {
-      // console.log('redirect', action);
       // 本地处理
       return this.$HttpSend(action).then((response) => {
         this.com = response.view || 'Simple';
@@ -18,10 +23,10 @@ export default {
         throw new Error('route');
       }).catch(() => {});
     },
+    /**
+     * 跳转完成钩子
+     */
     afterRedirect() {
-    },
-    passUp(action) {
-      return action && action.redirect;
     },
   },
 };

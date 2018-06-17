@@ -76,7 +76,8 @@ class Http {
     console.log('send', option);
     return $http(option).then((response) => {
       const data = response.data;
-      return Http.onReceive(data);
+      if (Http.onReceive(data) === false) throw new Error();
+      return data;
     }).catch();
   };
 
@@ -104,9 +105,10 @@ class Http {
     this.vue.prototype.$HttpPost = (url, value = null) => this.HttpSend({ url, value, post: true });
     this.vue.prototype.$HttpSend = Http.HttpSend;
 
-    this.vue.prototype.$addReceiver = receiver => this.receivers.push(receiver);
-
-    this.vue.prototype.$removeReceiver = id => this.receivers.splice(id, 1);
+    this.vue.prototype.$addReceiver = (receiver) => {
+      const id = this.receivers.push(receiver);
+      this.vue.beforeDestroy = () => this.receivers.splice(id, 1);
+    };
   }
 }
 

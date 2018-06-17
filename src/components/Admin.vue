@@ -48,7 +48,9 @@ export default {
     TreeView,
   },
   created() {
+    // 挂载跳转处理器
     this.$root.$EventBus.on('Admin', this.onRedirect.bind(this));
+    // 刷新页面
     this.$nextTick(() => {
       this.onRedirect(this.view);
     });
