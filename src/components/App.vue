@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <component :view="com" v-bind:is="com.name" @redirect="onRedirect"/>
-    <trace :information="trace"/>
+    <trace :traces="trace"/>
   </div>
 </template>
 

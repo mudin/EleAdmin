@@ -8,10 +8,9 @@
 
 <script>
 import VeForm from '../../views/VeForm';
+import View from './View';
 
 const U = require('../Util/Md5.js');
-
-import View from './View';
 
 export default {
   extends: View,

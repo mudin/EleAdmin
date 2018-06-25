@@ -1,6 +1,6 @@
 <template>
 <div class="trace">
-  <el-badge :value="information.length" class="trace-icon" v-show="!open">
+  <el-badge :value="traces.length" class="trace-icon" v-show="!open">
     <el-button size="small" @click="onOpen">调试</el-button>
   </el-badge>
   <el-card class="trace-card" v-show="open">
@@ -8,8 +8,8 @@
       <span>调试信息</span>
       <el-button class="trace-close-btn" type="text" @click="open = false">关闭</el-button>
     </div>
-    <div v-for="(o, i) in information" :key="i" class="text item">
-      <span :class="{'trace_error': o.level === 'error'}">{{o.message}}</span>
+    <div v-for="(o, i) in traces" :key="i" class="text item">
+      <span :class="{'trace_error': o.level === 'error'}">{{o.text}}</span>
     </div>
   </el-card>
 </div>
@@ -18,10 +18,10 @@
 <script>
 export default {
   props: [
-    'information',
+    'traces',
   ],
   data() {
-    const value = this.information.length;
+    const value = this.traces.length;
     return {
       open: false,
       value,
