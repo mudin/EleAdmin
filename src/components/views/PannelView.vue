@@ -7,9 +7,10 @@
 
 <script>
 import Pannel from './Pannel';
+import View from './View';
 
 export default {
-  props: ['view'],
+  extends: View,
   components: [
     Pannel,
   ],

@@ -39,9 +39,10 @@ import Pannel from './Pannel';
 import VeTable from './VeTable';
 import ElBtn from '../elements/ElBtn';
 import VeForm from './VeForm';
+import View from './View';
 
 export default {
-  props: ['view'],
+  extends: View,
   mixins: [Rank],
   data() {
     return {

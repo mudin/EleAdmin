@@ -1,3 +1,6 @@
+/**
+ * 数据池
+ */
 const Rank = {
   data() {
     return {

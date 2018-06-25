@@ -2,14 +2,15 @@
   <div id="app">
     <component :view="com" v-bind:is="com.name" @redirect="onRedirect"/>
     <trace :information="trace"/>
-    </div>
+  </div>
 </template>
 
 <script>
-import Father from './components/views/Container';
-import Admin from './components/Admin';
-import Trace from './components/Trace';
-import Login from './components/Login';
+import Father from './Container';
+import Admin from './apps/Admin';
+import Trace from './apps/Trace';
+import Login from './apps/Login';
+import Install from './apps/install';
 
 export default {
   name: 'App',
@@ -53,6 +54,7 @@ export default {
     Admin,
     Trace,
     Login,
+    Install,
   },
   methods: {
   },
@@ -60,16 +62,24 @@ export default {
 </script>
 
 <style>
-html,body{
+html,body {
   height: 100%;
   overflow: hidden;
 }
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   display: flex;
 }
+
+/** 居中布局元素 */
+.center {
+  text-align: center;
+  align-self: center;
+}
+
 .tree-view .el-tree-node__content {
   height: 50px;
   border-bottom: 1px solid #ebeef5;

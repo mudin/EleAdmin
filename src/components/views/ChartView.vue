@@ -6,8 +6,10 @@
 
 <script>
 import ElChart from '../elements/ElChart';
+import View from './View';
 
 export default {
+  extends: View,
   components: [ElChart],
   props: ['view'],
 };

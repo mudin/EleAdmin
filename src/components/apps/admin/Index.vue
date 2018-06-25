@@ -3,12 +3,17 @@
     <el-aside width="240px">
       <div class="logo"><img src="../assets/logo.png" /></div>
       <div><H2 class="title">后台管理系统</H2></div>
-      <Aside @redirect="redirect" :menus="menus"/>
+      <el-aside @redirect="redirect" :menus="menus"/>
     </el-aside>
     <el-container>
       <el-header height="80px">
         <h5 class="title">{{title}}</h5>
-        <user @redirect="redirect" :user="user" class="user"/>
+        <div class="user">
+        <el-command commands="user.commands">
+          <span class="userinfo-inner" slot="prefix">
+            <i class="el-icon-setting"></i> {{user.name || '用户'}} <i class="el-icon-arrow-down"></i>
+          </span>
+        </el-command>
       </el-header>
       <component :view="com" v-bind:is="com.name" />
     </el-container>
@@ -16,20 +21,21 @@
 </template>
 
 <script>
-import Aside from './views/Aside';
+import ElAside from './views/ElAside';
 import Father from './views/Container';
 import PannelView from './views/PannelView';
-import User from './views/User';
 import TableView from './views/TableView';
 import VeForm from './views/VeForm';
 import ElChart from './elements/ElChart';
 import ChartView from './views/ChartView';
 import TreeView from './views/TreeView';
+import ElCommand from './view/ElCommand';
+import View from '../views/View';
 
 export default {
   name: 'Admin',
   extends: Father,
-  props: ['view'],
+  mixins: [View],
   data() {
     return {
       user: {},
@@ -94,6 +100,16 @@ export default {
   background-color: #545c64;
   color: #333;
   text-align: center;
+}
+
+.user {
+  color: #E9EEF3;
+}
+
+.userinfo-inner {
+  cursor: pointer;
+  color: #fff;
+  padding-left: 10px;
 }
 
 .el-main {

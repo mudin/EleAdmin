@@ -38,8 +38,10 @@ export default {
 <style scoped>
 .trace {
   position: fixed;
+  left: 30px;
   bottom: 30px;
   right: 30px;
+  max-height: 400px;
 }
 .trace-close-btn {
   float: right; padding: 3px 0

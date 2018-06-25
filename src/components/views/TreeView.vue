@@ -17,15 +17,14 @@ import Rank from '../../Util/Rank';
 import ElBtn from '../elements/ElBtn';
 import Pannel from './Pannel';
 import VeTree from './VeTree';
+import View from './View';
 
 export default {
+  extends: View,
   components: {
     ElBtn,
     Pannel,
     VeTree,
-  },
-  props: {
-    view: Object,
   },
   mixins: [Rank],
   data() {

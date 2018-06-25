@@ -7,19 +7,20 @@
 </template>
 
 <script>
-import VeForm from './views/VeForm';
+import VeForm from '../../views/VeForm';
 
 const U = require('../Util/Md5.js');
 
-// console.log(md5);
+import View from './View';
 
 export default {
-  props: ['view'],
+  extends: View,
   data() {
     const self = this;
     return {
       title: self.view.title || 'VeAdmin管理后台',
       form: {
+        redirect: 'App',
         url: self.view.url,
         fields: [
           {
@@ -47,7 +48,6 @@ export default {
             ],
           },
         ],
-        redirect: 'App',
       },
       value: {},
     };

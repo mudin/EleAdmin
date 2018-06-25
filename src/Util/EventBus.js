@@ -1,3 +1,6 @@
+/**
+ * 事件总线
+ */
 const EventBus = {
   events: {},
   emit(event, ...args) {
