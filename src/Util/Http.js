@@ -57,19 +57,21 @@ class Http {
    * @returns {Promise<T>}
    */
   static HttpSend = (action = {}) => {
-    /** @type {boolean} */
-    const withValue = action && action.value;
+    if (!action || !action.url) return new Promise((resolve, reject) => reject());
+
     const option = {
-      url: Http.createUrl((action) ? action.url : undefined),
+      url: Http.createUrl(action.url),
     };
-    if (action && action.post) {
+
+    if (action.post) {
       option.method = 'post';
-      if (withValue) option.data = Qs.stringify(action.value);
       option.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+      if (action.value) option.data = Qs.stringify(action.value);
     } else {
-      if (withValue) option.params = JSON.parse(JSON.stringify(action.value));
       option.method = 'get';
+      if (action.value) option.params = JSON.parse(JSON.stringify(action.value));
     }
+
     // 开启跨域cookie
     option.withCredentials = true;
     option.paramsSerializer = params => Qs.stringify(params, { arrayFormat: 'brackets' });
