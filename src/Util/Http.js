@@ -57,10 +57,17 @@ class Http {
    * @returns {Promise<T>}
    */
   static HttpSend = (action = {}) => {
-    if (!action || !action.url) return new Promise((resolve, reject) => reject());
+    let url;
+    if (typeof action === 'string') {
+      url = action;
+    } else if (!action || !action.url) {
+      return new Promise((resolve, reject) => reject());
+    } else {
+      url = action.url;
+    }
 
     const option = {
-      url: Http.createUrl(action.url),
+      url: Http.createUrl(url),
     };
 
     if (action.post) {

@@ -7,10 +7,10 @@
 
 <script>
 import Father from './Container';
-import Admin from './apps/Admin';
+import Admin from './apps/admin/Index';
 import Trace from './apps/Trace';
 import Login from './apps/Login';
-import Install from './apps/install';
+// import Install from './apps/install/Index';
 
 export default {
   name: 'App',
@@ -39,7 +39,7 @@ export default {
       if (data.message) {
         this.$message({
           showClose: true,
-          message: data.message.information,
+          message: data.message.text,
           type: data.message.type,
         });
       }
@@ -54,7 +54,7 @@ export default {
     Admin,
     Trace,
     Login,
-    Install,
+    // Install,
   },
   methods: {
   },

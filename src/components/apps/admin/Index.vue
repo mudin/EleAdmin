@@ -1,15 +1,15 @@
 <template>
   <el-container id="admin">
-    <el-aside width="240px">
-      <div class="logo"><img src="../assets/logo.png" /></div>
-      <div><H2 class="title">后台管理系统</H2></div>
-      <el-aside @redirect="redirect" :menus="menus"/>
+    <el-aside style="width:240px;" @redirect="redirect" :menus="menus">
+      <template slot="prefix">
+        <div class="logo"><img src="../../../assets/logo.png" /></div>
+        <div><H2 class="title">{{view.title || '后台管理系统'}}</H2></div>
+      </template>
     </el-aside>
     <el-container>
       <el-header height="80px">
         <h5 class="title">{{title}}</h5>
-        <div class="user">
-        <el-command commands="user.commands">
+        <el-command :commands="user.commands" class="user">
           <span class="userinfo-inner" slot="prefix">
             <i class="el-icon-setting"></i> {{user.name || '用户'}} <i class="el-icon-arrow-down"></i>
           </span>
@@ -21,16 +21,16 @@
 </template>
 
 <script>
-import ElAside from './views/ElAside';
-import Father from './views/Container';
-import PannelView from './views/PannelView';
-import TableView from './views/TableView';
-import VeForm from './views/VeForm';
-import ElChart from './elements/ElChart';
-import ChartView from './views/ChartView';
-import TreeView from './views/TreeView';
-import ElCommand from './view/ElCommand';
-import View from '../views/View';
+import ElAside from '../../elements/ElAside';
+import Father from '../../Container';
+import PannelView from '../../views/PannelView';
+import TableView from '../../views/TableView';
+import VeForm from '../../views/VeForm';
+import ElChart from '../../elements/ElChart';
+import ChartView from '../../views/ChartView';
+import TreeView from '../../views/TreeView';
+import ElCommand from '../../elements/ElCommand';
+import View from '../../views/View';
 
 export default {
   name: 'Admin',
@@ -39,16 +39,16 @@ export default {
   data() {
     return {
       user: {},
-      menus: [],
+      menus: {},
       title: '管理首页',
     };
   },
   components: {
-    Aside,
+    ElAside,
+    ElCommand,
     PannelView,
     TableView,
     ElChart,
-    User,
     VeForm,
     ChartView,
     TreeView,
@@ -94,12 +94,6 @@ export default {
 
 .el-footer {
   background-color: #B3C0D1;
-}
-
-.el-aside {
-  background-color: #545c64;
-  color: #333;
-  text-align: center;
 }
 
 .user {

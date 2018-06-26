@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import View from '../views/View';
+import View from './View';
 
 /**
  * 由于引入组件的原因，这个类必须继承

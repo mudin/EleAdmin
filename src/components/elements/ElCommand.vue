@@ -22,7 +22,7 @@ export default {
   props: {
     commands: {
       type: Array,
-      default: [],
+      default: () => [],
     },
   },
   methods: {

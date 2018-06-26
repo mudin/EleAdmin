@@ -1,6 +1,6 @@
 <script>
 import License from './License';
-import StepView from '../views/StepView';
+import StepView from '../../views/StepView';
 
 export default {
   extends: { StepView },

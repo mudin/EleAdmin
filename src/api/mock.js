@@ -1,13 +1,21 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import Mocker from 'mockjs';
+import Qs from 'qs';
+
+window.host = '';
+// 服务器入口
+window.index = '/index.json';
 
 // This sets the api adapter on the default instance
 const mock = new MockAdapter(axios);
 
 /** 通用调试信息 */
 const trace = Mocker.mock({
-  'rows|5-10': ['@name'],
+  'rows|10-20': [{
+    text: '@csentence',
+    'type|1': ['success', 'warning', 'info', 'error'],
+  }],
 });
 
 /** 通用菜单 */
@@ -46,7 +54,7 @@ const menus = [
     index: '2',
     label: '用户管理',
     url: 'login.json',
-    redirect: 'App',
+    layer: 'App',
   },
 ];
 
@@ -80,23 +88,52 @@ const commands = [
  */
 /** 后台入口 */
 mock.onGet('/index.json').reply(200, {
-  url: 'login.json',
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  redirect: '/login.json',
+  trace,
 });
 
 /** 登录页面 */
 mock.onGet('/login.json').reply(200, {
   view: {
     name: 'Login',
-    action: '/login.json',
     title: 'EleAdmin后台',
-    verifyImgUrl: '/ver.jpg',
+    form: {
+      url: '/login.json',
+      fields: [
+        {
+          index: 'user-name',
+          label: '用户名',
+          name: 'name',
+          colWidth: 200,
+          sortable: true,
+          rule: [
+            { required: true, message: '请输入用户名', trigger: 'blur' },
+          ],
+        }, {
+          index: 'user-password',
+          label: '密码',
+          name: 'password',
+          colWidth: 100,
+          holder: 'password',
+          rule: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+          ],
+        }, {
+          index: 'user-verify',
+          label: '验证码',
+          name: 'verify',
+          colWidth: 100,
+          holder: 'verify',
+          url: '/verify.json',
+          rule: [
+            { required: true, message: '请输入验证码', trigger: 'blur' },
+            { validator: 'validateAsync', trigger: 'blur', url: '/verify/check.json', message: '验证码错误' },
+          ],
+        },
+      ],
+    },
   },
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });
 
 /** 验证码 */
@@ -108,27 +145,38 @@ mock.onGet('/verify.json').reply(200,
 mock.onGet('/verify/check.json').reply(config => [
   200,
   (config.params.value.toLowerCase() === 'vemin') ? {
-    status: 1,
+    status: true,
   } : {
-    status: -1,
-    message: '验证码错误',
+    status: false,
+    // message: {
+    //   text: '验证码错误',
+    //   type: 'warning',
+    // },
   },
 ]);
 
 /** 登陆动作 */
-mock.onPost('/login.json').reply(200, {
-  next: '/main.json',
-});
+mock.onPost('/login.json').reply(config => [
+  200,
+  (Qs.parse(config.data).verify.toLowerCase() === 'vemin') ? {
+    redirect: '/main.json',
+  } : {
+    // status: false,
+    message: {
+      text: '到不了的地方',
+      type: 'warning',
+    },
+  },
+]);
 
 /** 后台主页 */
 mock.onGet('/main.json').reply(200, {
   view: {
     name: 'Admin',
     url: '/admin.json',
+    title: '鸿瑞科技',
   },
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });
 
 /** 管理页面 */
@@ -138,10 +186,13 @@ mock.onGet('/admin.json').reply(200, {
     commands,
   },
   menus,
-  view: {},
+  view: {
+    name: 'Simple',
+    message: '仪表盘',
+  },
   trace,
   message: {
-    information: '登录成功，欢迎回来！',
+    text: '登录成功，欢迎回来！',
     type: 'success',
   },
 });
@@ -284,9 +335,7 @@ mock.onGet('/table/view.json').reply(200, {
     actions: Demo.actions,
     url: '/table/data.json',
   },
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });
 
 /** 单元格修改 */
@@ -307,9 +356,7 @@ mock.onGet('/table/data.json').reply(() => [200, Mocker.mock({
   ],
   'selected|1-5': ['@integer(1,10)'],
   total: 200,
-  trace: {
-    'rows|5-10': ['@name'],
-  },
+  trace,
 })]);
 
 /** 表单界面 */
@@ -324,16 +371,12 @@ mock.onGet('/form.json').reply(200, {
     fields: Demo.columns,
     url: '/form.json',
   },
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });
 
 mock.onPost('/form.json').reply(200, {
   next: '/table/view.json',
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });
 
 /** 图表界面 */
@@ -360,9 +403,7 @@ mock.onGet('/status.json').reply(200, {
       }],
     },
   },
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });
 
 /** 树状表格 */
@@ -397,16 +438,12 @@ mock.onGet('/tree/data.json').reply(() => [200, Mocker.mock({
       ],
     },
   ],
-  trace: {
-    'rows|5-10': ['@name'],
-  },
+  trace,
 })]);
 
 mock.onGet('/user.json').reply(200, {
   view: {
     name: 'Simple',
   },
-  trace: Mocker.mock({
-    'rows|5-10': ['@name'],
-  }),
+  trace,
 });

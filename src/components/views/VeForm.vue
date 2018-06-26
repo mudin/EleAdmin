@@ -66,20 +66,22 @@ export default {
     },
     handleSubmit() {
       this.$refs.form.validate((valid) => {
-        if (valid) {
-          // 内联搜索表单
-          if (this.view.inline) return this.$emit('search', this.formdata);
-
-          // POST提交后跳转
-          const url = this.view.url;
-          if (this.onSubmit) this.formdata = this.onSubmit(this.formdata);
-          return this.$HttpPost(url, this.formdata).then((data) => {
-            this.$root.$EventBus.emit(this.view.redirect || 'Admin', { url: data.data.next || this.view.next });
+        if (!valid) {
+          return this.$notify.error({
+            title: '消息',
+            message: '数据验证未通过',
           });
         }
-        return this.$notify.error({
-          title: '消息',
-          message: '数据验证未通过',
+
+        // 内联搜索表单
+        if (this.view.inline) return this.$emit('search', this.formdata);
+
+        // POST提交后跳转
+        const url = this.view.url;
+        if (this.onSubmit) this.formdata = this.onSubmit(this.formdata);
+        return this.$HttpPost(url, this.formdata).then((data) => {
+          const layer = data.layer || this.view.layer || 'Admin';
+          this.$root.$EventBus.emit(layer, { url: data.next || this.view.next });
         });
       });
     },
@@ -92,11 +94,12 @@ export default {
     },
     validateAsync(rule, value, callback) {
       this.$HttpGet(rule.url, { rule, value }).then((data) => {
-        if (data) {
+        if (data.status) {
           callback();
+        } else {
+          callback(new Error(rule.message));
         }
-        callback(new Error('验证码错误'));
-      });
+      }, () => callback(new Error(rule.message)));
     },
     input(field, value) {
       this.$set(this.formdata, field, value);

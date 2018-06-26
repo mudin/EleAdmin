@@ -12,7 +12,7 @@ window.host = 'http://192.168.0.253';
 // 服务器入口
 window.index = '/element.php/admin/index/index';
 
-// require('./api/mock');
+require('./api/mock');
 
 Vue.createUrl = url => window.host + (url || window.index);
 
