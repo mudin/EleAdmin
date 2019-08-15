@@ -1,4 +1,8 @@
-# ele-admin 3.1
+## ele-admin 3.1
+
+EleAdmin cloned from https://gitee.com/bfgdqch/EleAdmin/tree/3.1/
+
+Translated some part to English
 
 > New version, compatible with the old version, a lot of transformation, more clear
 
