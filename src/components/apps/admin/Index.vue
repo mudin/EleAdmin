@@ -2,8 +2,12 @@
   <el-container id="admin">
     <el-aside style="width:240px;" @redirect="redirect" :menus="menus">
       <template slot="prefix">
-        <div class="logo"><img src="../../../assets/logo.png" /></div>
-        <div><H2 class="title">{{view.title || '后台管理系统'}}</H2></div>
+        <div class="logo">
+          <img src="../../../assets/logo.png" />
+        </div>
+        <div>
+          <H2 class="title">{{view.title || '后台管理系统'}}</H2>
+        </div>
       </template>
     </el-aside>
     <el-container>
@@ -11,7 +15,9 @@
         <h5 class="title">{{title}}</h5>
         <el-command :commands="user.commands" class="user">
           <span class="userinfo-inner" slot="prefix">
-            <i class="el-icon-setting"></i> {{user.name || '用户'}} <i class="el-icon-arrow-down"></i>
+            <i class="el-icon-setting"></i>
+            {{user.name || '用户'}}
+            <i class="el-icon-arrow-down"></i>
           </span>
         </el-command>
       </el-header>
@@ -40,7 +46,7 @@ export default {
     return {
       user: {},
       menus: {},
-      title: '管理首页',
+      title: 'Home',
     };
   },
   components: {

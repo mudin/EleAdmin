@@ -1,16 +1,26 @@
 <template>
-  <el-form ref="form" :rules="rules"
-  :model="formdata" :inline="view.inline"
-  :label-width="view.labelWidth || '80px'"
-  :style="view.style" :size="view.size">
-    <el-form-item v-for="field of view.fields" :key="field.index"
-    :label="field.label" :prop="field.name" >
-        <el-form-field :item="field" :value="formdata[field.name]" @input="input"></el-form-field>
+  <el-form
+    ref="form"
+    :rules="rules"
+    :model="formdata"
+    :inline="view.inline"
+    :label-width="view.labelWidth || '80px'"
+    :style="view.style"
+    :size="view.size"
+  >
+    <el-form-item
+      v-for="field of view.fields"
+      :key="field.index"
+      :label="field.label"
+      :prop="field.name"
+      :placeholder="field.placeholder"
+    >
+      <el-form-field :item="field" :value="formdata[field.name]" @input="input"></el-form-field>
     </el-form-item>
     <el-form-item>
-        <el-button type="primary" @click="handleSubmit">{{btnLabel}}</el-button>
-        <el-button v-if="!view.inline" @click="handleReset">取消</el-button>
-    </el-form-item>
+      <el-button type="primary" @click="handleSubmit">{{btnLabel}}</el-button>
+      <el-button v-if="!view.inline" @click="handleReset">Reset</el-button>
+    </el-form-item>admin: admin
   </el-form>
 </template>
 
@@ -57,7 +67,7 @@ export default {
   },
   computed: {
     btnLabel() {
-      return this.view.inline ? '搜索' : '提交';
+      return this.view.inline ? '搜索' : 'Login';
     },
   },
   methods: {
@@ -87,7 +97,7 @@ export default {
     },
     validatePassword(rule, value, callback) {
       if (value !== rule.name) {
-        callback(new Error(rule.message || '两次输入密码不一致!'));
+        callback(new Error(rule.message || '两次输入Password不一致!'));
       } else {
         callback();
       }

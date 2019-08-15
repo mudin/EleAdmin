@@ -1,16 +1,18 @@
 <template>
   <div class="login-view">
     <h1 class="login-title">{{title}}</h1>
-    <ve-form :view="form" :value="value"
-    class="login-form" :onSubmit = 'onSubmit'/>
+    <ve-form
+      :view="form"
+      :value="value"
+      class="login-form"
+      :onSubmit="onSubmit"
+    />
   </div>
 </template>
 
 <script>
 import VeForm from '../views/VeForm';
 import View from '../views/View';
-
-const U = require('../../Util/Md5.js');
 
 export default {
   extends: View,
@@ -28,7 +30,7 @@ export default {
   methods: {
     onSubmit(data) {
       // eslint-disable-next-line
-      data.password = U.md5(data.verify.toLowerCase() + U.md5(data.password));
+      // data.password = U.md5(data.password);
       return data;
     },
   },
