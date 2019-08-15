@@ -1,20 +1,20 @@
 # ele-admin 3.1
 
-> 全新的版本，兼容旧版, 大量改造, 更清楚
+> New version, compatible with the old version, a lot of transformation, more clear
 
-1. 采用了Vue、ElementUI最新版本
-2. 代码更简洁，功能更强大
-3. 新的CMS实用功能：模块生成系统（2.0功能暂时没更新）
+1. Adopted the latest version of Vue, ElementUI
+2. The code is more concise and more powerful
+3. New CMS utility function: module generation system (2.0 function is not updated temporarily)
 
-> 简明的设计思想
+> Concise design ideas
 
-1. 元素页面（图表、表单、表格、树）和容器页面（管理界面、登陆界面）设计思想
-2. ele-admin语言：通过json数据自动生成界面
-3. 配置数据（json）简单统一，易于理解
+1. Element page (chart, form, table, tree) and container page (management interface, login interface) design ideas
+2. ele-admin language: automatically generate interface through json data
+3. Configuration data (json) is simple and unified, easy to understand
 
-> 截图
+> screenshot
 
-登陆页面，实现了验证码实时验证
+Login page
 
 ![登陆页面](https://gitee.com/uploads/images/2017/1229/070645_96c724ae_45533.jpeg "火狐截图_2017-12-28T22-51-29.jpg")
 
@@ -39,5 +39,8 @@ npm install
 
 # serve with hot reload at localhost:8080
 npm run server
+
+# build for prod
+npm run build
 
 
