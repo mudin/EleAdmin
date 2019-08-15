@@ -6,7 +6,7 @@
       :value="value"
       class="login-form"
       :onSubmit="onSubmit"
-    />
+    />admin: admin
   </div>
 </template>
 

@@ -20,7 +20,7 @@
     <el-form-item>
       <el-button type="primary" @click="handleSubmit">{{btnLabel}}</el-button>
       <el-button v-if="!view.inline" @click="handleReset">Reset</el-button>
-    </el-form-item>admin: admin
+    </el-form-item>
   </el-form>
 </template>
 
@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     btnLabel() {
-      return this.view.inline ? '搜索' : 'Login';
+      return this.view.inline ? '搜索' : 'Ok';
     },
   },
   methods: {
